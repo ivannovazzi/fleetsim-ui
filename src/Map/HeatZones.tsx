@@ -1,12 +1,15 @@
 import { useHeatzones } from "@/hooks/useHeatzones";
-
-import React, { useContext, useMemo } from "react";
-import { RoadNetworkContext } from "./RoadNetworkMap";
+import React, { useMemo } from "react";
+import { useMapContext } from "@/components/Map/mapContext";
 
 function PoligonToPath(coordinates: [number, number][]) {
-  return coordinates.map(([x, y], i) => {
-    return `${i === 0 ? "M" : "L"} ${x} ${y}`;
-  }).join(" ") + " Z";
+  return (
+    coordinates
+      .map(([x, y], i) => {
+        return `${i === 0 ? "M" : "L"} ${x} ${y}`;
+      })
+      .join(" ") + " Z"
+  );
 }
 
 interface PolygonProps {
@@ -24,23 +27,23 @@ export const Polygon: React.FC<PolygonProps> = ({
   fillOpacity = 1,
   stroke = "#000",
   strokeWidth = 1,
-  opacity = 1
+  opacity = 1,
 }) => {
-  const { projection } = useContext(RoadNetworkContext);
+  const { projection } = useMapContext();
 
   const projected = useMemo(() => {
     if (!projection) return "";
-    
+
     const projectedPoints = coordinates
-      .map(coord => projection(coord))
-      .filter(point => point !== null) as [number, number][];
+      .map((coord) => projection(coord))
+      .filter((point) => point !== null) as [number, number][];
 
     if (projectedPoints.length === 0) return "";
 
     return projectedPoints;
   }, [coordinates, projection]);
 
-  if (!projected) return null;  
+  if (!projected) return null;
 
   return (
     <path
@@ -54,7 +57,7 @@ export const Polygon: React.FC<PolygonProps> = ({
   );
 };
 
-export default function Heatzones({visible}: {visible: boolean}) {
+export default function Heatzones({ visible }: { visible: boolean }) {
   const heatzones = useHeatzones();
   if (!visible) return null;
   return heatzones.map((heatzone) => {

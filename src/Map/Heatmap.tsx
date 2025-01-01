@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import * as d3 from "d3";
 import { Vehicle } from "@/types";
-import { RoadNetworkContext } from "./RoadNetworkMap";
+import { useMapContext } from "@/components/Map/mapContext";
 
 interface HeatmapProps {
   vehicles: Vehicle[];
@@ -17,7 +17,7 @@ export default function Heatmap({
   opacity = 0.02,
   thresholds = 50,
 }: HeatmapProps) {
-  const { projection } = useContext(RoadNetworkContext);
+  const { projection } = useMapContext();
   const heatmapRef = useRef<SVGGElement>(null);
   
   // Memoize density generator

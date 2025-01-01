@@ -10,6 +10,7 @@ import { useOptions } from "@/hooks/useOptions";
 import { Input, Switch, Range, Typeahead } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
 import { invertLatLng } from "@/utils/utils";
+import Test from "./Test";
 
 function Item({
   label,
@@ -251,6 +252,7 @@ export default function ControlPanel({
           onClick={running ? client.stop : handleStart}
         />
       </div>
+      <Test />
     </section>
   );
 }

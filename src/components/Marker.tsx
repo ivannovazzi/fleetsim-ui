@@ -1,10 +1,10 @@
-import React, { useContext, useRef, useEffect } from "react";
-import { RoadNetworkContext } from "../Map/RoadNetworkMap";
+import React, { useRef, useEffect } from "react";
 import { Position } from "@/types";
+import { useMapContext } from "./Map/mapContext";
 
 interface MarkerProps {
   position: Position;
-  children?: React.ReactNode;  
+  children?: React.ReactNode;
   offset?: [number, number];
   animation?: number;
   onClick?: () => void;
@@ -17,11 +17,11 @@ export const Marker: React.FC<MarkerProps> = ({
   offset,
   animation = 500,
   onClick,
-  onHover
+  onHover,
 }) => {
-  const { projection } = useContext(RoadNetworkContext);
+  const { projection } = useMapContext();
   const markerRef = useRef<SVGGElement>(null);
-  
+
   // Existing position update effect
   useEffect(() => {
     if (!projection || !markerRef.current) return;
@@ -33,33 +33,33 @@ export const Marker: React.FC<MarkerProps> = ({
     if (!onClick) return;
     e.stopPropagation();
     onClick();
-  }
+  };
 
   const onMouseEnter = (e: React.MouseEvent<SVGGElement>) => {
-   if (!onHover) return;
+    if (!onHover) return;
     e.stopPropagation();
     onHover();
-  }
+  };
 
   const onMouseLeave = (e: React.MouseEvent<SVGGElement>) => {
     if (!onHover) return;
     e.stopPropagation();
     onHover();
-  }
+  };
 
   return (
-    <g 
+    <g
       ref={markerRef}
       onClick={onMarkerClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       style={{
         transition: `transform ${animation}ms linear`,
-        transform: 'translate(0, 0)',
-        cursor: onClick ? 'pointer' : 'default'
+        transform: "translate(0, 0)",
+        cursor: onClick ? "pointer" : "default",
       }}
-    >   
-      <g transform={`translate(${offset?.[0] ?? 0}, ${offset?.[1] ?? 0})`}>         
+    >
+      <g transform={`translate(${offset?.[0] ?? 0}, ${offset?.[1] ?? 0})`}>
         {children}
       </g>
     </g>

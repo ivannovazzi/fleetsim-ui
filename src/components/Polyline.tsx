@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { RoadNetworkContext } from '../Map/RoadNetworkMap';
 import { Position } from '@/types';
+import { useMapContext } from './Map/mapContext';
 
 interface PolylineProps {
   coordinates: Position[];
@@ -16,7 +16,7 @@ export const Polyline: React.FC<PolylineProps> = ({
   width = 1,
   onClick
 }) => {
-  const { projection } = useContext(RoadNetworkContext);
+  const { projection } = useMapContext()
   const pathRef = useRef<SVGPathElement>(null);
 
   useEffect(() => {

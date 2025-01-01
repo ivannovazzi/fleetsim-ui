@@ -1,21 +1,14 @@
 import React, {
   useEffect,
-  createContext,
   useState,
   MouseEventHandler,
 } from "react";
 import * as d3 from "d3";
 import { Position } from "@/types";
 import { useResizeObserver } from "@/hooks/useResizeObserver";
+import { MapControlsProvider } from "@/components/Map/controlsContext";
+import { MapContextProvider } from "@/components/Map/mapContext";
 
-interface MapContext {
-  projection: d3.GeoProjection | null;
-  transform: d3.ZoomTransform | null;
-}
-export const RoadNetworkContext = createContext<MapContext>({
-  projection: null,
-  transform: null,
-});
 
 interface RoadFeature {
   type: "Feature";
@@ -51,11 +44,15 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
   strokeOpacity = 0.4,
   children,
   onClick,
-}) => {  
+}) => {
   const [svgRef, setSvgRef] = useState<SVGSVGElement | null>(null);
   const [projection, setProjection] = useState<d3.GeoProjection | null>(null);
   const [transform, setTransform] = useState<d3.ZoomTransform | null>(null);
-  const [containerRef, size] = useResizeObserver();  
+  const [zoom, setZoom] = useState<d3.ZoomBehavior<
+    SVGSVGElement,
+    unknown
+  > | null>(null);
+  const [containerRef, size] = useResizeObserver();
 
   useEffect(() => {
     if (!svgRef || !size.width || !size.height || !data) return;
@@ -68,11 +65,11 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     const proj = d3.geoMercator().fitSize([size.width, size.height], data);
     const pathGen = d3.geoPath().projection(proj);
     setProjection(() => proj);
-    
+
     const roadsGroup = svg.insert("g", ":first-child").attr("class", "roads");
-    
+
     // Filter and cache long main roads first
-    const mainRoads = data.features.filter(d => {
+    const mainRoads = data.features.filter((d) => {
       if (!d.properties.name) return false;
       if (d.properties.highway === "primary") return true;
       const length = d3.geoLength(d);
@@ -97,9 +94,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
       // Add IDs only to main roads
-      .attr("id", (d, i) => 
-        mainRoads.includes(d) ? `road-${i}` : null
-      );
+      .attr("id", (d, i) => (mainRoads.includes(d) ? `road-${i}` : null));
 
     // Add labels for main roads
     const labelsGroup = roadsGroup
@@ -122,21 +117,24 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     //   .text(d => d.properties.name!);
 
     const markersGroup = svg.select<SVGGElement>("g.markers");
-    
+
     // Simplified zoom handler
-    const zoom = d3.zoom<SVGSVGElement, unknown>()
+    const zoomBehavior = d3
+      .zoom<SVGSVGElement, unknown>()
       .scaleExtent([1, 8])
       .on("zoom", (evt) => {
         roadsGroup.attr("transform", evt.transform.toString());
         markersGroup.attr("transform", evt.transform.toString());
-        
+
         // Simple opacity toggle
         labelsGroup.style("opacity", evt.transform.k > 2 ? 0.9 : 0);
-        
+
         setTransform(evt.transform);
       });
 
-    svg.call(zoom);
+    setZoom(() => zoomBehavior);
+
+    svg.call(zoomBehavior);
   }, [data, size, strokeColor, strokeWidth, strokeOpacity, svgRef]);
 
   const onSvgClick: MouseEventHandler<SVGSVGElement> = (evt) => {
@@ -149,21 +147,29 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
   };
 
   return (
-    <RoadNetworkContext.Provider value={{ projection, transform }}>
-      <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
-        <svg
-          ref={(node) => setSvgRef(node)}
-          style={{
-            width: "100%",
-            height: "100%",
-            background: "#111",
-            display: "block",
-          }}
-          onClick={onSvgClick}
-        >
-          <g className="markers">{children}</g>
-        </svg>
-      </div>
-    </RoadNetworkContext.Provider>
+    <MapContextProvider projection={projection} transform={transform}>
+      <MapControlsProvider
+        svgRef={svgRef}
+        zoomBehavior={zoom}
+        projection={projection}
+      >
+        <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
+          <svg
+            ref={(node) => setSvgRef(node)}
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "#111",
+              display: "block",
+            }}
+            onClick={onSvgClick}
+          >
+            <g className="markers">{children}</g>
+          </svg>
+
+          {/* children that read from MapControlsContext */}
+        </div>
+      </MapControlsProvider>
+    </MapContextProvider>
   );
 };
