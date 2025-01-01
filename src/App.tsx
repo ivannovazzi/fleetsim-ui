@@ -5,10 +5,13 @@ import Map from "./Map/Map";
 import { Modifiers, Position, Road, SimulationStatus } from "./types";
 import styles from "./App.module.css";
 import { useVehicles } from "./useVehicles";
+import useContextMenu from "./hooks/useContextMenu";
+import ContextMenu from "./components/ContextMenu";
 
 export default function App() {
+  const [onContextClick, ref, xy, onCloseClick] = useContextMenu();
   const [selectedRoad, setSelectedRoad] = useState<Road | null>(null);
-  const [destination, setDestination] = useState<{ position: Position; tmp: boolean } | null>(null);
+  const [destination, setDestination] = useState<Position | null>(null);
   const [status, setStatus] = useState<
     Pick<SimulationStatus, "interval" | "running">
   >({
@@ -39,21 +42,49 @@ export default function App() {
       }));
     };
 
-  const onMapClick = (coords: Position) => {
-    setDestination({position: coords, tmp: true });
+  const onMapClick = (e: unknown, coords: Position) => {
+    // setDestination({ position: coords, tmp: true });
     onUnselectVehicle();
-    client.getNode(coords).then((node) => {
-      setDestination({position: node.data.coordinates, tmp: false });
-    });    
+    // client.getNode(coords).then((node) => {
+    //   setDestination({ position: node.data.coordinates, tmp: false });
+    // });
   };
-  
 
-  const onDestinationClick = async () => {
+  const onClearStuff = () => {
+    console.log("clearing stuff");
+    onCloseClick();
+    setDestination(null);
+    onUnselectVehicle();
+  };
+
+  const onRoadDestinationClick = async () => {
+    const positions = selectedRoad!.streets.flat();
+    const getOne = (arr: Position[]) =>
+      arr[Math.floor(Math.random() * arr.length)];
+
+    await setFinalDestination(getOne(positions));
+    setDestination(null);
+    onCloseClick();
+  };
+
+  const onPointDestinationClick = async () => {
+    await setFinalDestination(destination!);
+    setDestination(null);
+    onCloseClick();
+  };
+
+  const setFinalDestination = async (position: Position) => {
+    const node = await client.getNode(position);
+
     await client.direction(
       vehicles.map((v) => v.id),
-      destination!.position
+      node.data.coordinates
     );
-    setDestination(null);
+  };
+
+  const onMapContextClick = (e: React.MouseEvent, position: Position) => {
+    setDestination(position);
+    onContextClick(e);
   };
 
   useEffect(() => {
@@ -89,14 +120,14 @@ export default function App() {
           vehicles={vehicles}
           connected={connected}
           modifiers={modifiers}
-          destination={destination?.position}
+          hasDirections={!!selectedRoad}
           filters={filters}
           onFilterChange={onFilterChange}
           onChangeModifiers={onChangeModifiers}
           onSelectVehicle={onSelectVehicle}
           onHoverVehicle={onHoverVehicle}
           onUnhoverVehicle={onUnhoverVehicle}
-          onDestinationClick={onDestinationClick}
+          onDestinationClick={onRoadDestinationClick}
           onRoadSelect={(road) => setSelectedRoad(road)}
         />
       </div>
@@ -109,10 +140,25 @@ export default function App() {
           modifiers={modifiers}
           onClick={onSelectVehicle}
           onMapClick={onMapClick}
-          destination={destination}
-          road={selectedRoad}
+          onDragStart={onClearStuff}
+          onMapContextClick={onMapContextClick}
+          selectedRoad={selectedRoad}
         />
       </div>
+      {xy && (
+        <ContextMenu position={xy}>
+          <div
+            ref={ref}
+            style={{
+              padding: "0.5rem",
+              backdropFilter: "blur(5px)",
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
+            }}
+          >
+            <div onClick={onPointDestinationClick}>Find Directions To Here</div>
+          </div>
+        </ContextMenu>
+      )}
     </div>
   );
 }

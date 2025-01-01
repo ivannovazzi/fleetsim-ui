@@ -62,3 +62,23 @@ export function LowBattery(props: SVGProps) {
     </svg>
   );
 }
+
+export function ZoomIn(props: SVGProps) {
+  return (
+    <svg {...props} viewBox="0 0 24 24">
+      <g id="SVGRepo_iconCarrier">
+        <path d="M18,15H13V20H11V15H6V13H11V8H13V13H18V15Z"></path>
+      </g>
+    </svg>
+  );
+}
+
+export function ZoomOut(props: SVGProps) {
+  return (
+    <svg {...props} viewBox="0 0 24 24">
+      <g id="SVGRepo_iconCarrier">
+        <path d="M18,15H6V13H18V15Z"></path>
+      </g>
+    </svg>
+  );
+}

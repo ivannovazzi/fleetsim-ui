@@ -34,7 +34,9 @@ interface RoadNetworkMapProps {
   strokeWidth?: number;
   strokeOpacity?: number;
   children?: React.ReactNode;
-  onClick?: (point: Position) => void;
+  onClick?: (event: React.MouseEvent, position: Position ) => void;
+  onDragStart?: (event: React.MouseEvent, position: Position ) => void;
+  onContextClick?: (event: React.MouseEvent, position: Position ) => void;
 }
 
 export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
@@ -44,6 +46,8 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
   strokeOpacity = 0.4,
   children,
   onClick,
+  onDragStart,
+  onContextClick,
 }) => {
   const [svgRef, setSvgRef] = useState<SVGSVGElement | null>(null);
   const [projection, setProjection] = useState<d3.GeoProjection | null>(null);
@@ -59,7 +63,6 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
 
     const svg = d3.select(svgRef);
     svg.selectAll("g.roads").remove();
-
     svg.attr("width", size.width).attr("height", size.height);
 
     const proj = d3.geoMercator().fitSize([size.width, size.height], data);
@@ -140,8 +143,27 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     const [mx, my] = transform.invert([sx, sy]);
     const coords = projection.invert?.([mx, my]);
     if (!coords) return;
-    onClick?.(coords);
+    onClick?.(evt, coords);
   };
+
+  const onSvgContextClick: MouseEventHandler<SVGSVGElement> = (evt) => {
+    if (!projection || !transform) return;
+    const [sx, sy] = d3.pointer(evt, svgRef);
+    const [mx, my] = transform.invert([sx, sy]);
+    const coords = projection.invert?.([mx, my]);
+    if (!coords) return;    
+    onContextClick?.(evt, coords);
+  }
+
+  const onDragStartHandler = (evt: React.MouseEvent) => {
+    console.log("drag start");
+    if (!projection || !transform) return;
+    const [sx, sy] = d3.pointer(evt, svgRef);
+    const [mx, my] = transform.invert([sx, sy]);
+    const coords = projection.invert?.([mx, my]);
+    if (!coords) return;
+    onDragStart?.(evt, coords);
+  }
 
   return (
     <MapContextProvider projection={projection} transform={transform}>
@@ -150,7 +172,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
         zoomBehavior={zoom}
         projection={projection}
       >
-        <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
+        <div ref={containerRef} style={{ width: "100%", height: "100%" }} onDragStart={onDragStartHandler}>
           <svg
             ref={(node) => setSvgRef(node)}
             style={{
@@ -160,6 +182,8 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
               display: "block",
             }}
             onClick={onSvgClick}
+            onContextMenu={onSvgContextClick}
+            onDragStart={onDragStartHandler}
           >
             <g className="markers">{children}</g>
           </svg>

@@ -1,16 +1,16 @@
 import React from "react";
 import client from "@/utils/client";
-import { Modifiers, Position, Road, StartOptions, Vehicle } from "@/types";
+import { Modifiers, Road, StartOptions, Vehicle } from "@/types";
 import styles from "./Controls.module.css";
 import Vehicles from "./Vehicles";
-import { Directions, HeatZone } from "@/components/Icons";
+import { Directions, HeatZone, ZoomIn, ZoomOut } from "@/components/Icons";
 import { Filters } from "@/useVehicles";
 import { useRoads } from "@/hooks/useRoads";
 import { useOptions } from "@/hooks/useOptions";
 import { Input, Switch, Range, Typeahead } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
-import Test from "./Test";
 import useTracking from "./useTracking";
+import { useMapControls } from "@/components/Map/hooks";
 
 function Item({
   label,
@@ -73,7 +73,8 @@ interface ControlPanelProps {
   interval: number;
   connected: boolean;
   modifiers: Modifiers;
-  destination?: Position;
+  hasDirections?: boolean;
+
   onChangeModifiers: <T extends keyof Modifiers>(
     name: T
   ) => (value: Modifiers[T]) => void;
@@ -92,7 +93,7 @@ export default function ControlPanel({
   interval,
   connected,
   modifiers,
-  destination,
+  hasDirections: direction,
   filters,
   onChangeModifiers,
   onFilterChange,
@@ -102,10 +103,11 @@ export default function ControlPanel({
   onDestinationClick,
   onRoadSelect,
 }: ControlPanelProps) {
+  const { zoomIn, zoomOut } = useMapControls();  
   const { options, updateOption } = useOptions(300);
   const { roads } = useRoads();
 
-  useTracking(vehicles, filters.selected, interval);
+  useTracking(vehicles, filters.selected, interval);  
 
   const handleChange =
     (field: keyof StartOptions) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,6 +133,13 @@ export default function ControlPanel({
             type="checkbox"
             checked={modifiers.showRoutes}
             onChange={eValue(onChangeModifiers("showRoutes"))}
+          />
+        </Item>
+        <Item label="Show Vehicles:">
+          <Switch
+            type="checkbox"
+            checked={modifiers.showVehicles}
+            onChange={eValue(onChangeModifiers("showVehicles"))}
           />
         </Item>
         <Item label="Show Heatmap:">
@@ -245,8 +254,10 @@ export default function ControlPanel({
         <SquaredButton
           onClick={onDestinationClick}
           icon={<Directions />}
-          disabled={!destination}
+          disabled={!direction}
         />
+        <SquaredButton onClick={zoomIn} icon={<ZoomIn />} />
+        <SquaredButton onClick={zoomOut} icon={<ZoomOut />} />
       </div>
       <div className={styles.mainButton}>
         <StartStopButton
@@ -254,7 +265,6 @@ export default function ControlPanel({
           onClick={running ? client.stop : handleStart}
         />
       </div>
-      <Test />
     </section>
   );
 }

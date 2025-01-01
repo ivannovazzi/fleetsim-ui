@@ -14,6 +14,7 @@ export interface Modifiers {
   showRoutes: boolean;
   showHeatzones: boolean;
   showHeatmap: boolean;
+  showVehicles: boolean;
 }
 
 export enum VehicleStatus {

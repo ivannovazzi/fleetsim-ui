@@ -7,26 +7,27 @@ import VehicleM from "./Vehicle";
 import Heatzones from "./Heatzones";
 import Route from "./Route";
 import Roada from "./Road";
-import Destination from "./Destination";
 import Heatmap from "./Heatmap";
 
 interface MapProps {
-  destination: { position: Position, tmp: boolean } | null;
   filters: Filters;
   vehicles: Vehicle[];
   animFreq: number;
   modifiers: Modifiers;
-  road: Road | null;
+  selectedRoad: Road | null;
   onClick: (id: string) => void;
-  onMapClick: (e: Position) => void;
+  onDragStart: (event: React.MouseEvent, position: Position) => void;
+  onMapClick?: (event: React.MouseEvent, position: Position) => void;
+  onMapContextClick: (evt: React.MouseEvent, position: Position) => void;
 }
 
 export default function Map({
-  destination,
   modifiers,
   filters,
-  road,
+  selectedRoad,
+  onDragStart,
   onMapClick,
+  onMapContextClick,
   ...props
 }: MapProps) {
   const network = useNetwork();
@@ -40,11 +41,13 @@ export default function Map({
       strokeColor="#444"
       strokeWidth={1.5}
       onClick={onMapClick}
-    >      
-      {destination && <Destination destination={destination} />}
+      onDragStart={onDragStart}
+      onContextClick={onMapContextClick}
+    >
+      {/* {destination && <Destination destination={destination} />} */}
       <Route selected={filters.selected} hovered={filters.hovered} />
       <Heatzones visible={modifiers.showHeatzones} />
-      {props.vehicles?.map((vehicle) => (
+      {modifiers.showVehicles && props.vehicles?.map((vehicle) => (
         <VehicleM
           key={vehicle.id}
           position={vehicle.position}
@@ -62,14 +65,8 @@ export default function Map({
           onClick={() => props.onClick(vehicle.id)}
         />
       ))}
-      {modifiers.showHeatmap && <Heatmap
-        vehicles={props.vehicles}
-      />}
-      {road && (
-        <Roada
-          road={road}
-        />
-      )}
+      {modifiers.showHeatmap && <Heatmap vehicles={props.vehicles} />}
+      {selectedRoad && <Roada road={selectedRoad} />}
     </RoadNetworkMap>
   );
 }

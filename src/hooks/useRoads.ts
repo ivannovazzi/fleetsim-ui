@@ -3,11 +3,11 @@ import client from "@/utils/client";
 import { useContext, useEffect } from "react";
 
 export function useRoads() {
-  const {roads, setRoads} = useContext(ClientDataContext);
-  
+  const { roads, setRoads } = useContext(ClientDataContext);
+
   useEffect(() => {
     client.getRoads().then((response) => {
-      setRoads(response.data);
+      setRoads(response.data.filter((road) => road.name !== ""));
     });
   }, [setRoads]);
 
