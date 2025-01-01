@@ -16,6 +16,7 @@ function VehicleMarker({
   position,
   status,
   selected,
+  hovered,
   heading,
   animFreq,
   scale,
@@ -30,6 +31,7 @@ function VehicleMarker({
   
   const className = classNames(styles.vehicle, {
     [styles.selected]: selected,
+    [styles.hovered]: hovered,
     [styles[status.toLowerCase()]]: true,
   });  
 
@@ -43,7 +45,16 @@ function VehicleMarker({
       onClick={onClick}
       onHover={console.log}
     >
-      <path d="M-1 -2 L-1 2 L1 2 L1 -2 Z" className={className} style={bearingStyle}/>
+      <rect
+        x="-1"
+        y="-2"
+        width="2"
+        height="4"
+        rx="1"
+        ry="1"
+        className={className}
+        style={bearingStyle}
+      />
     </Marker>
   );
 }

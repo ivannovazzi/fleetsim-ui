@@ -1,19 +1,12 @@
 import { createContext, useCallback } from "react";
 import * as d3 from "d3";
-import { setMapControlsRef } from "./controls";
+import { MapControlsContextValue, PanToOptions, setMapControlsRef } from "./controls";
 
-export interface MapControlsContextValue {
-  zoomIn: () => void;
-  zoomOut: () => void;
-  panTo: (lng: number, lat: number) => void;
-  setBounds: () => void;
-}
-
-export const MapControlsContext = createContext<MapControlsContextValue>({
+const MapControlsContext = createContext<MapControlsContextValue>({
   zoomIn: () => {},
   zoomOut: () => {},
   panTo: () => {},
-  setBounds: () => {},
+  setZoom: () => {},
 });
 
 interface Props {
@@ -40,23 +33,31 @@ export function MapControlsProvider({
   }, [svgRef, zoomBehavior]);
 
   const panTo = useCallback(
-    (lng: number, lat: number) => {
+    (lng: number, lat: number, options: PanToOptions) => {
       if (!projection || !svgRef || !zoomBehavior) return;
       const [x, y] = projection([lng, lat]) ?? [0, 0];
-      d3.select(svgRef).transition().call(zoomBehavior.translateTo, x, y);
+      const transition = d3.select(svgRef).transition().ease(d3.easeLinear);
+      if (options?.duration) {
+        transition.duration(options.duration);
+      }
+      transition.call(zoomBehavior.translateTo, x, y);
     },
     [projection, svgRef, zoomBehavior]
   );
 
-  const setBounds = useCallback(() => {
-    // Custom bounding logic
-  }, []);
+  const setZoom = useCallback(
+    (zoom: number) => {
+      if (!svgRef || !zoomBehavior) return;
+      d3.select(svgRef).transition().call(zoomBehavior.scaleTo, zoom);
+    },
+    [svgRef, zoomBehavior]
+  );
 
   const value: MapControlsContextValue = {
     zoomIn,
     zoomOut,
     panTo,
-    setBounds
+    setZoom,
   };
 
   // Register controls in store

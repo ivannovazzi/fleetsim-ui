@@ -29,13 +29,6 @@ export default function RouteMap({ selected, hovered }: RouteProps) {
 
   return (
     <>
-      {selectedRoute && (
-        <Polyline
-          coordinates={selectedRoute.edges.map((edge) => edge.start.coordinates)}
-          key={`${selected}--selected`}
-          color={"#39f"}
-        />
-      )}
       {hoveredRoute && (
         <Polyline
           coordinates={hoveredRoute.edges.map((edge) => edge.start.coordinates)}
@@ -43,6 +36,13 @@ export default function RouteMap({ selected, hovered }: RouteProps) {
           color={"#f93"}
         />
       )}
+      {selectedRoute && (
+        <Polyline
+          coordinates={selectedRoute.edges.map((edge) => edge.start.coordinates)}
+          key={`${selected}--selected`}
+          color={"#39f"}
+        />
+      )}      
     </>
   );
 }

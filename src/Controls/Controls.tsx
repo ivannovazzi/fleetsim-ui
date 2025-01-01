@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import client from "@/utils/client";
 import { Modifiers, Position, StartOptions, Vehicle } from "@/types";
 import styles from "./Controls.module.css";
@@ -11,6 +11,9 @@ import { Input, Switch, Range, Typeahead } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
 import { invertLatLng } from "@/utils/utils";
 import Test from "./Test";
+import { mod } from "node_modules/@deck.gl/core/dist/utils/math-utils";
+import { useMapControls } from "@/components/Map/controls";
+import useTracking from "./useTracking";
 
 function Item({
   label,
@@ -103,8 +106,9 @@ export default function ControlPanel({
   onRoadSelect,
 }: ControlPanelProps) {
   const { options, updateOption } = useOptions(300);
-
   const { roads } = useRoads();
+
+  useTracking(vehicles, filters.selected, interval);
 
   const handleChange =
     (field: keyof StartOptions) => (e: React.ChangeEvent<HTMLInputElement>) => {

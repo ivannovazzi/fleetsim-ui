@@ -4,7 +4,7 @@ export interface MapContextValue {
   projection: d3.GeoProjection | null;
   transform: d3.ZoomTransform | null;
 }
-export const MapContext = createContext<MapContextValue>({
+const MapContext = createContext<MapContextValue>({
   projection: null,
   transform: null,
 });
