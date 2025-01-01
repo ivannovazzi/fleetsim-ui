@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import client from "@/utils/client";
 import ControlPanel from "./Controls/Controls";
 import Map from "./Map/Map";
-import { Modifiers, Position, SimulationStatus } from "./types";
+import { Modifiers, Position, Road, SimulationStatus } from "./types";
 import styles from "./App.module.css";
 import { useVehicles } from "./useVehicles";
 
 export default function App() {
+  const [selectedRoad, setSelectedRoad] = useState<Road | null>(null);
   const [destination, setDestination] = useState<{ position: Position; tmp: boolean } | null>(null);
   const [status, setStatus] = useState<
     Pick<SimulationStatus, "interval" | "running">
@@ -96,7 +97,7 @@ export default function App() {
           onHoverVehicle={onHoverVehicle}
           onUnhoverVehicle={onUnhoverVehicle}
           onDestinationClick={onDestinationClick}
-          onRoadSelect={onMapClick}
+          onRoadSelect={(road) => setSelectedRoad(road)}
         />
       </div>
 
@@ -109,6 +110,7 @@ export default function App() {
           onClick={onSelectVehicle}
           onMapClick={onMapClick}
           destination={destination}
+          road={selectedRoad}
         />
       </div>
     </div>

@@ -1,14 +1,16 @@
 import React, { useRef, useEffect } from "react";
 import { Position } from "@/types";
-import { useMapContext } from "./Map/mapContext";
+import { useMapContext } from "../hooks";
+import { on } from "events";
 
 interface MarkerProps {
   position: Position;
   children?: React.ReactNode;
   offset?: [number, number];
   animation?: number;
-  onClick?: () => void;
-  onHover?: () => void;
+  onClick?: (e: React.MouseEvent<SVGGElement>) => void;
+  onMouseEnter?: (e: React.MouseEvent<SVGGElement>) => void;
+  onMouseLeave?: (e: React.MouseEvent<SVGGElement>) => void;
 }
 
 export const Marker: React.FC<MarkerProps> = ({
@@ -17,7 +19,8 @@ export const Marker: React.FC<MarkerProps> = ({
   offset,
   animation = 500,
   onClick,
-  onHover,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   const { projection } = useMapContext();
   const markerRef = useRef<SVGGElement>(null);
@@ -32,19 +35,7 @@ export const Marker: React.FC<MarkerProps> = ({
   const onMarkerClick = (e: React.MouseEvent<SVGGElement>) => {
     if (!onClick) return;
     e.stopPropagation();
-    onClick();
-  };
-
-  const onMouseEnter = (e: React.MouseEvent<SVGGElement>) => {
-    if (!onHover) return;
-    e.stopPropagation();
-    onHover();
-  };
-
-  const onMouseLeave = (e: React.MouseEvent<SVGGElement>) => {
-    if (!onHover) return;
-    e.stopPropagation();
-    onHover();
+    onClick(e);
   };
 
   return (

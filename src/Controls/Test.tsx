@@ -1,4 +1,4 @@
-import { useMapControls } from "@/components/Map/controls";
+import { useMapControls } from "@/components/Map/hooks";
 
 const SomeButtonBar = () => {
   const {zoomIn, zoomOut, panTo} = useMapControls();  

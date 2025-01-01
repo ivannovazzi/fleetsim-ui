@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { Position } from '@/types';
-import { useMapContext } from './Map/mapContext';
+import { useMapContext } from '../hooks';
 
 interface PolylineProps {
   coordinates: Position[];
@@ -22,15 +22,12 @@ export const Polyline: React.FC<PolylineProps> = ({
   useEffect(() => {
     if (!projection || !pathRef.current || coordinates.length < 2) return;
 
-    // Project coordinates to screen space
-    const points = coordinates.map(coord => projection([coord[1], coord[0]]));
-
-    // Create path generator
+    const points = coordinates.map(coord => projection(coord));
+    
     const lineGenerator = d3.line()
       .x(d => d[0])
       .y(d => d[1]);
-
-    // Update path
+    
     d3.select(pathRef.current)
       .datum(points)
       .attr('d', lineGenerator);

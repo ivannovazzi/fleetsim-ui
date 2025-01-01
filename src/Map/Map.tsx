@@ -1,4 +1,4 @@
-import { Modifiers, Position, Vehicle } from "@/types";
+import { Modifiers, Position, Road, Vehicle } from "@/types";
 import { Filters } from "@/useVehicles";
 
 import { useNetwork } from "@/hooks/useNetwork";
@@ -6,6 +6,7 @@ import { RoadNetworkMap } from "./RoadNetworkMap";
 import VehicleM from "./Vehicle";
 import Heatzones from "./Heatzones";
 import Route from "./Route";
+import Roada from "./Road";
 import Destination from "./Destination";
 import Heatmap from "./Heatmap";
 
@@ -15,6 +16,7 @@ interface MapProps {
   vehicles: Vehicle[];
   animFreq: number;
   modifiers: Modifiers;
+  road: Road | null;
   onClick: (id: string) => void;
   onMapClick: (e: Position) => void;
 }
@@ -23,6 +25,7 @@ export default function Map({
   destination,
   modifiers,
   filters,
+  road,
   onMapClick,
   ...props
 }: MapProps) {
@@ -62,6 +65,11 @@ export default function Map({
       {modifiers.showHeatmap && <Heatmap
         vehicles={props.vehicles}
       />}
+      {road && (
+        <Roada
+          road={road}
+        />
+      )}
     </RoadNetworkMap>
   );
 }

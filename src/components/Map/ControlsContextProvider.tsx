@@ -1,13 +1,8 @@
-import { createContext, useCallback } from "react";
+import { useCallback } from "react";
 import * as d3 from "d3";
-import { MapControlsContextValue, PanToOptions, setMapControlsRef } from "./controls";
-
-const MapControlsContext = createContext<MapControlsContextValue>({
-  zoomIn: () => {},
-  zoomOut: () => {},
-  panTo: () => {},
-  setZoom: () => {},
-});
+import { setMapControlsRef } from "./controls";
+import { MapControlsContextValue, PanToOptions } from "./types";
+import { MapControlsContext } from "./contexts";
 
 interface Props {
   svgRef: SVGSVGElement | null;
@@ -40,7 +35,7 @@ export function MapControlsProvider({
       if (options?.duration) {
         transition.duration(options.duration);
       }
-      transition.call(zoomBehavior.translateTo, x, y);
+      transition.call(zoomBehavior.translateTo, x, y);      
     },
     [projection, svgRef, zoomBehavior]
   );
@@ -53,11 +48,41 @@ export function MapControlsProvider({
     [svgRef, zoomBehavior]
   );
 
+  const setBounds = useCallback(
+    (bounds: [[number, number], [number, number]]) => {
+      if (!projection || !svgRef || !zoomBehavior) return;
+      const [[x0, y0], [x1, y1]] = bounds.map(projection) as [
+        [number, number],
+        [number, number]
+      ];
+
+      // Get SVG dimensions
+      const width = svgRef.clientWidth;
+      const height = svgRef.clientHeight;
+
+      // Calculate scale to fit bounds
+      const scale = Math.min(
+        width / Math.abs(x1 - x0),
+        height / Math.abs(y1 - y0)
+      ) * 0.9; // 0.9 adds a small padding
+
+      // Calculate center point
+      const x = (x0 + x1) / 2;
+      const y = (y0 + y1) / 2;
+
+      const transition = d3.select(svgRef).transition().ease(d3.easeLinear);
+      transition.call(zoomBehavior.scaleTo, scale);
+      transition.call(zoomBehavior.translateTo, x, y);
+    },
+    [projection, svgRef, zoomBehavior]
+  );
+
   const value: MapControlsContextValue = {
     zoomIn,
     zoomOut,
     panTo,
     setZoom,
+    setBounds
   };
 
   // Register controls in store

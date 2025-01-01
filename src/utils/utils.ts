@@ -1,19 +1,22 @@
-import { Position } from "geojson";
+import { Position } from "@/types";
 
 export const calculateRotation = (current: number, target: number) => {
   const normalizedCurrent = ((current % 360) + 360) % 360;
   const normalizedTarget = ((target % 360) + 360) % 360;
   
-  const clockwise = normalizedTarget - normalizedCurrent;
-  const counterClockwise = normalizedTarget - normalizedCurrent - 360;
+  let diff = normalizedTarget - normalizedCurrent;
   
-  if (Math.abs(clockwise) > Math.abs(counterClockwise)) {
-    return counterClockwise;
+  // Ensure we take the shortest path
+  if (diff > 180) {
+    diff -= 360;
+  } else if (diff < -180) {
+    diff += 360;
   }
-  return clockwise;
+  
+  return diff;
 };
 
 
-export function invertLatLng([lat, lng]: Position): Position {
-  return [lng, lat];
+export function invertLatLng([a, b]: Position): Position {
+  return [b, a];
 }

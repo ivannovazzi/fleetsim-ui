@@ -1,4 +1,4 @@
-import { useMapControls } from "@/components/Map/controls";
+import { useMapControls } from "@/components/Map/hooks";
 import { Vehicle } from "@/types";
 import { useEffect } from "react";
 

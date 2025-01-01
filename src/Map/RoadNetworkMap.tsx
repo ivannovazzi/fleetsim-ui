@@ -6,8 +6,8 @@ import React, {
 import * as d3 from "d3";
 import { Position } from "@/types";
 import { useResizeObserver } from "@/hooks/useResizeObserver";
-import { MapControlsProvider } from "@/components/Map/controlsContext";
-import { MapContextProvider } from "@/components/Map/mapContext";
+import { MapControlsProvider } from "@/components/Map/ControlsContextProvider";
+import { MapContextProvider } from "@/components/Map/MapContextProvider";
 
 
 interface RoadFeature {
@@ -92,15 +92,13 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
       )
       .attr("stroke-opacity", strokeOpacity)
       .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      // Add IDs only to main roads
+      .attr("stroke-linecap", "round")      
       .attr("id", (d, i) => (mainRoads.includes(d) ? `road-${i}` : null));
 
-    // Add labels for main roads
     const labelsGroup = roadsGroup
       .append("g")
       .attr("class", "street-labels")
-      .style("opacity", 0);
+      .style("opacity", 0.4);
 
     // labelsGroup
     //   .selectAll("text")
@@ -108,8 +106,8 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     //   .enter()
     //   .append("text")
     //   .attr("dy", 0)
-    //   .attr("fill", "#fff")
-    //   .attr("font-size", "3px")
+    //   .attr("fill", "#eee")
+    //   .attr("font-size", "2px")
     //   .attr("text-anchor", "middle")
     //   .append("textPath")
     //   .attr("xlink:href", (d, i) => `#road-${i}`)
@@ -123,13 +121,12 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
       .zoom<SVGSVGElement, unknown>()
       .scaleExtent([1, 8])
       .on("zoom", (evt) => {
-        roadsGroup.attr("transform", evt.transform.toString());
-        markersGroup.attr("transform", evt.transform.toString());
-
-        // Simple opacity toggle
-        labelsGroup.style("opacity", evt.transform.k > 2 ? 0.9 : 0);
-
-        setTransform(evt.transform);
+        requestAnimationFrame(() => {
+          roadsGroup.attr("transform", evt.transform.toString());
+          markersGroup.attr("transform", evt.transform.toString());
+          labelsGroup.style("opacity", evt.transform.k > 6 ? 0.9 : 0);
+          setTransform(evt.transform);
+        });
       });
 
     setZoom(() => zoomBehavior);
@@ -166,8 +163,6 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
           >
             <g className="markers">{children}</g>
           </svg>
-
-          {/* children that read from MapControlsContext */}
         </div>
       </MapControlsProvider>
     </MapContextProvider>

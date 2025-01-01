@@ -51,6 +51,7 @@ interface TypeaheadProps<T>
   renderOption?: (option: T) => React.ReactNode;
   renderLabel?: (option: T) => string;
   onChange: (option: T) => void;
+  onOptionHover?: (option: T | null) => void;
 }
 
 export function Typeahead<T>({
@@ -59,6 +60,7 @@ export function Typeahead<T>({
   renderLabel,
   renderOption,
   onChange,
+  onOptionHover = () => {},
   ...props
 }: TypeaheadProps<T>) {
   const [inputValue, setInputValue] = React.useState("");
@@ -99,7 +101,7 @@ export function Typeahead<T>({
         onBlur={() => setIsOpen(false)}
         className={styles.input}
       />
-      {isOpen && filtered.length > 0 && inputValue && (
+      {isOpen && filtered.length > 0 && (
         <ul className={styles.dropdown}>
           {filtered.map((option, i) => (
             <li
@@ -108,6 +110,8 @@ export function Typeahead<T>({
                 e.preventDefault();
                 handleSelect(option);
               }}
+              onMouseEnter={() => onOptionHover(option)}
+              onMouseLeave={() => onOptionHover(null)}
               className={styles.option}
             >
               {renderOption ? renderOption(option) : String(option)}

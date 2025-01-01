@@ -3,7 +3,7 @@ import classNames from "classnames";
 import React, {  memo, useEffect } from "react";
 import { Position, Vehicle } from "@/types";
 import { calculateRotation } from "@/utils/utils";
-import { Marker } from "../../components/Marker";
+import { Marker } from "../../components/Map/components/Marker";
 
 interface VehicleProps extends Vehicle {
   position: Position;
@@ -43,7 +43,8 @@ function VehicleMarker({
     <Marker
       position={position}
       onClick={onClick}
-      onHover={console.log}
+      onMouseEnter={console.log}
+      onMouseLeave={console.log}
     >
       <rect
         x="-1"

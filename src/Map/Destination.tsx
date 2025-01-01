@@ -1,4 +1,4 @@
-import { Marker } from "../components/Marker";
+import { Marker } from "../components/Map/components/Marker";
 import { Position } from "@/types";
 
 interface DirectionPointsProps {

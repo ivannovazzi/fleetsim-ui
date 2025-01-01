@@ -95,7 +95,7 @@ export interface VehicleRoute {
 export interface Road {
   name: string;
   nodeIds: Set<string>;
-  coordinates: Position[];
+  streets: Position[][];
 }
 
 export interface Heatzone {

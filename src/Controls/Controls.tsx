@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import client from "@/utils/client";
-import { Modifiers, Position, StartOptions, Vehicle } from "@/types";
+import { Modifiers, Position, Road, StartOptions, Vehicle } from "@/types";
 import styles from "./Controls.module.css";
 import Vehicles from "./Vehicles";
 import { Directions, HeatZone } from "@/components/Icons";
@@ -9,10 +9,7 @@ import { useRoads } from "@/hooks/useRoads";
 import { useOptions } from "@/hooks/useOptions";
 import { Input, Switch, Range, Typeahead } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
-import { invertLatLng } from "@/utils/utils";
 import Test from "./Test";
-import { mod } from "node_modules/@deck.gl/core/dist/utils/math-utils";
-import { useMapControls } from "@/components/Map/controls";
 import useTracking from "./useTracking";
 
 function Item({
@@ -86,7 +83,7 @@ interface ControlPanelProps {
   onUnhoverVehicle: () => void;
   onFilterChange: (value: string) => void;
   onDestinationClick: () => void;
-  onRoadSelect: (position: Position) => void;
+  onRoadSelect: (road: Road) => void;
 }
 
 export default function ControlPanel({
@@ -239,7 +236,8 @@ export default function ControlPanel({
       <div className={styles.buttons}>
         <Typeahead
           options={roads}
-          onChange={(road) => onRoadSelect(invertLatLng(road.coordinates[0] as Position))}
+          onChange={(road) => onRoadSelect(road)}
+          onOptionHover={(road) => onRoadSelect(road!)}
           renderOption={(item) => item.name}
           placeholder="Search a road"
         />

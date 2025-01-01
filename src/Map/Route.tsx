@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Polyline } from "../components/Polyline";
 import { Route } from "@/types";
 import { useRoutes } from "@/hooks/useRoutes";
+import { Polyline } from "@/components/Map/components/Polyline";
+import { invertLatLng } from "@/utils/utils";
 
 interface RouteProps {
   selected?: string;
@@ -31,14 +32,14 @@ export default function RouteMap({ selected, hovered }: RouteProps) {
     <>
       {hoveredRoute && (
         <Polyline
-          coordinates={hoveredRoute.edges.map((edge) => edge.start.coordinates)}
+          coordinates={hoveredRoute.edges.map((edge) => invertLatLng(edge.start.coordinates))}
           key={`${hovered}--hovered`}
           color={"#f93"}
         />
       )}
       {selectedRoute && (
         <Polyline
-          coordinates={selectedRoute.edges.map((edge) => edge.start.coordinates)}
+          coordinates={selectedRoute.edges.map((edge) => invertLatLng(edge.start.coordinates))}
           key={`${selected}--selected`}
           color={"#39f"}
         />
