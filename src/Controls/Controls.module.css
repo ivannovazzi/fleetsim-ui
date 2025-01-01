@@ -1,0 +1,126 @@
+.controlPanel {
+  background: #393939;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 10px;
+  height: 240px;
+}
+
+.status,
+.vehicles,
+.options,
+.buttons,
+.mainButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0 5px;
+}
+
+.status {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  justify-content: space-between;
+  padding: 10px;
+}
+.status p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+  color: #fff;  
+}
+
+.options {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+  gap: 2px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.mainButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2px 0;
+}
+.itemLabel {
+  font-size: 0.9rem;
+  color: #eee;
+}
+.itemValue {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #eee;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.squaredButton {
+  height: 30px;
+  width: 30px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;  
+  background: rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+.squaredButton:hover, .squaredButton:focus {
+  background: #0b6055;
+}
+
+.squaredButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.squaredButtonIcon {
+  height: 20px;
+  width: 20px;
+  fill: #999;
+}
+
+.playPauseButton {
+  background-color: #28a745; /* Green */
+  color: #ffffff;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 40px;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  .controlPanel {
+    padding: 10px;
+  }
+
+  .options {
+    grid-template-columns: 1fr;
+  }
+
+  .buttons {
+    justify-content: center;
+  }
+}

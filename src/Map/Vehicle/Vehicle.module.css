@@ -1,0 +1,37 @@
+.vehicle {
+  fill: #dcdcdc;
+  transition: opacity 0.3s, border 0.3s, fill 0.3s;  
+  margin-bottom: -25px;
+  stroke: #333;
+  stroke-width: 0.2px;
+}
+
+.hovered {
+  outline: 2px solid #ffeb3b; /* Yellow */
+}
+
+.selected {
+  box-shadow: 0px 0px 10px #000;
+  stroke: #06c;
+  stroke-width: 0.5px;
+}
+
+.onshift {
+  fill: #388e3c; /* Dark green */
+}
+
+.online {
+  fill: #1976d2; /* Dark blue */
+}
+
+.offline {
+  fill: #d32f2f; /* Darker red */
+}
+
+.untracked {
+  fill: #fbc02d; /* Dark yellow */
+}
+
+.unknown {
+  fill: #757575; /* Dark gray */
+}
