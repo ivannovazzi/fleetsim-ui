@@ -4,29 +4,10 @@ import React, {
   MouseEventHandler,
 } from "react";
 import * as d3 from "d3";
-import { Position } from "@/types";
+import { Position, RoadNetwork } from "@/types";
 import { useResizeObserver } from "@/hooks/useResizeObserver";
 import { MapControlsProvider } from "@/components/Map/ControlsContextProvider";
 import { MapContextProvider } from "@/components/Map/MapContextProvider";
-
-
-interface RoadFeature {
-  type: "Feature";
-  geometry: {
-    type: "LineString";
-    coordinates: [number, number][];
-  };
-  properties: {
-    name?: string;
-    type?: string;
-    speed_limit?: number;
-  };
-}
-
-interface RoadNetwork {
-  type: "FeatureCollection";
-  features: RoadFeature[];
-}
 
 interface RoadNetworkMapProps {
   data: RoadNetwork;

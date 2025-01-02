@@ -1,5 +1,5 @@
 import React from "react";
-import { Road, Route, Heatzone, StartOptions } from "./types";
+import { Road, Route, Heatzone, StartOptions, RoadNetwork } from "./types";
 
 type RouteMap = Map<string, Route>;
 
@@ -8,12 +8,12 @@ interface ClientData {
   roads: Road[];
   routes: Map<string, Route>;
   heatzones: Heatzone[];
-  network: GeoJSON.FeatureCollection;
-  setOptions: React.Dispatch<React.SetStateAction<StartOptions>>,
-  setRoads: React.Dispatch<React.SetStateAction<Road[]>>,
-  setRoutes:  React.Dispatch<React.SetStateAction<RouteMap>>,
-  setHeatzones: React.Dispatch<React.SetStateAction<Heatzone[]>>,
-  setNetwork: React.Dispatch<React.SetStateAction<GeoJSON.FeatureCollection>>,
+  network: RoadNetwork;
+  setOptions: React.Dispatch<React.SetStateAction<StartOptions>>;
+  setRoads: React.Dispatch<React.SetStateAction<Road[]>>;
+  setRoutes: React.Dispatch<React.SetStateAction<RouteMap>>;
+  setHeatzones: React.Dispatch<React.SetStateAction<Heatzone[]>>;
+  setNetwork: React.Dispatch<React.SetStateAction<RoadNetwork>>;
 }
 
 export const ClientDataContext = React.createContext<ClientData>({
@@ -59,7 +59,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [roads, setRoads] = React.useState<Road[]>([]);
   const [routes, setRoutes] = React.useState<RouteMap>(new Map());
   const [heatzones, setHeatzones] = React.useState<Heatzone[]>([]);
-  const [network, setNetwork] = React.useState<GeoJSON.FeatureCollection>({
+  const [network, setNetwork] = React.useState<RoadNetwork>({
     type: "FeatureCollection",
     features: [],
   });

@@ -68,6 +68,23 @@ export interface StartOptions {
   updateServerTimeout: number;
 }
 
+interface RoadFeature {
+  type: "Feature";
+  geometry: {
+    type: "LineString";
+    coordinates: [number, number][];
+  };
+  properties: {
+    name?: string;
+    type?: string;
+    speed_limit?: number;
+  };
+}
+
+export interface RoadNetwork {
+  type: "FeatureCollection";
+  features: RoadFeature[];
+}
 export interface Route {
   edges: Edge[];
   distance: number;

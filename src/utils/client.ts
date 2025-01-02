@@ -10,6 +10,7 @@ import {
   Road,
   Position,
   Heatzone,
+  RoadNetwork,
 } from "@/types";
 
 class SimulationService {
@@ -98,8 +99,8 @@ class SimulationService {
     return this.http.get<SimulationStatus>("/status");
   }
 
-  async getNetwork(): Promise<ApiResponse<GeoJSON.FeatureCollection>> {
-    return this.http.get<GeoJSON.FeatureCollection>("/network");
+  async getNetwork(): Promise<ApiResponse<RoadNetwork>> {
+    return this.http.get<RoadNetwork>("/network");
   }
 
   async getRoads(): Promise<ApiResponse<Road[]>> {

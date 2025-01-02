@@ -42,16 +42,11 @@ export default function App() {
       }));
     };
 
-  const onMapClick = (e: unknown, coords: Position) => {
-    // setDestination({ position: coords, tmp: true });
-    onUnselectVehicle();
-    // client.getNode(coords).then((node) => {
-    //   setDestination({ position: node.data.coordinates, tmp: false });
-    // });
+  const onMapClick = () => {
+    clearMap();    
   };
 
-  const onClearStuff = () => {
-    console.log("clearing stuff");
+  const clearMap = () => {
     onCloseClick();
     setDestination(null);
     onUnselectVehicle();
@@ -63,14 +58,12 @@ export default function App() {
       arr[Math.floor(Math.random() * arr.length)];
 
     await setFinalDestination(getOne(positions));
-    setDestination(null);
-    onCloseClick();
+    clearMap();
   };
 
   const onPointDestinationClick = async () => {
     await setFinalDestination(destination!);
-    setDestination(null);
-    onCloseClick();
+    clearMap();
   };
 
   const setFinalDestination = async (position: Position) => {
@@ -140,7 +133,7 @@ export default function App() {
           modifiers={modifiers}
           onClick={onSelectVehicle}
           onMapClick={onMapClick}
-          onDragStart={onClearStuff}
+          onDragStart={onMapClick}
           onMapContextClick={onMapContextClick}
           selectedRoad={selectedRoad}
         />

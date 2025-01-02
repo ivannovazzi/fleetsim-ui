@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { Position } from "@/types";
 import { useMapContext } from "../hooks";
-import { on } from "events";
 
 interface MarkerProps {
   position: Position;
