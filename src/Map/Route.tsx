@@ -4,6 +4,26 @@ import { useRoutes } from "@/hooks/useRoutes";
 import { Polyline } from "@/components/Map/components/Polyline";
 import { invertLatLng } from "@/utils/utils";
 
+interface RouteLineProps {
+  route: Route;
+  color: string;
+}
+
+import Label from "@/components/Map/components/Label";
+
+function RouteLine({ route, color }: RouteLineProps) {
+  const distance = `${route.distance.toFixed(1)} km`;
+  const coordinates = route.edges.map((edge) => edge.start.coordinates).map(invertLatLng);
+  return (
+    <>
+      <Polyline
+        coordinates={coordinates}
+        color={color}
+      />
+      <Label label={distance} coordinates={coordinates}/>
+    </>
+  );
+}
 interface RouteProps {
   selected?: string;
   hovered?: string;
@@ -31,15 +51,15 @@ export default function RouteMap({ selected, hovered }: RouteProps) {
   return (
     <>
       {hoveredRoute && (
-        <Polyline
-          coordinates={hoveredRoute.edges.map((edge) => invertLatLng(edge.start.coordinates))}
+        <RouteLine
+          route={hoveredRoute}
           key={`${hovered}--hovered`}
           color={"#f93"}
         />
       )}
       {selectedRoute && (
-        <Polyline
-          coordinates={selectedRoute.edges.map((edge) => invertLatLng(edge.start.coordinates))}
+        <RouteLine
+          route={selectedRoute}
           key={`${selected}--selected`}
           color={"#39f"}
         />

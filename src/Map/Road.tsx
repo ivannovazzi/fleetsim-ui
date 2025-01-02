@@ -2,6 +2,7 @@ import { Road } from "@/types";
 import { Polyline } from "@/components/Map/components/Polyline";
 import { useEffect } from "react";
 import { useMapControls } from "@/components/Map/hooks";
+import Label from "@/components/Map/components/Label";
 
 interface RouteProps {
   road: Road;
@@ -29,12 +30,14 @@ export default function RouteMap({ road }: RouteProps) {
   useEffect(() => {
     setBounds(getBounds(road.streets.flat()));    
   }, [road.streets, setBounds]);
-  return road.streets.map((street, i) => (
+  const lines = road.streets.map((street, i) => (
     <Polyline
       coordinates={street}
       key={`street-${i}`}
       color={"#fff"}
     />
   ));
+
+  return <>{lines}<Label coordinates={road.streets.flat()} label={road.name}/> </>;
   
 }

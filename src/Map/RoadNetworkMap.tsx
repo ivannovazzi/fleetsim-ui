@@ -17,6 +17,7 @@ interface RoadNetworkMapProps {
   children?: React.ReactNode;
   onClick?: (event: React.MouseEvent, position: Position ) => void;
   onDragStart?: (event: React.MouseEvent, position: Position ) => void;
+  onDragEnd?: (event: React.MouseEvent, position: Position ) => void;
   onContextClick?: (event: React.MouseEvent, position: Position ) => void;
 }
 
@@ -28,6 +29,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
   children,
   onClick,
   onDragStart,
+  onDragEnd,
   onContextClick,
 }) => {
   const [svgRef, setSvgRef] = useState<SVGSVGElement | null>(null);
@@ -134,17 +136,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     const coords = projection.invert?.([mx, my]);
     if (!coords) return;    
     onContextClick?.(evt, coords);
-  }
-
-  const onDragStartHandler = (evt: React.MouseEvent) => {
-    console.log("drag start");
-    if (!projection || !transform) return;
-    const [sx, sy] = d3.pointer(evt, svgRef);
-    const [mx, my] = transform.invert([sx, sy]);
-    const coords = projection.invert?.([mx, my]);
-    if (!coords) return;
-    onDragStart?.(evt, coords);
-  }
+  };
 
   return (
     <MapContextProvider projection={projection} transform={transform}>
@@ -153,7 +145,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
         zoomBehavior={zoom}
         projection={projection}
       >
-        <div ref={containerRef} style={{ width: "100%", height: "100%" }} onDragStart={onDragStartHandler}>
+        <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
           <svg
             ref={(node) => setSvgRef(node)}
             style={{
@@ -161,10 +153,10 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
               height: "100%",
               background: "#111",
               display: "block",
+              cursor: "grab",
             }}
             onClick={onSvgClick}
-            onContextMenu={onSvgContextClick}
-            onDragStart={onDragStartHandler}
+            onContextMenu={onSvgContextClick}            
           >
             <g className="markers">{children}</g>
           </svg>

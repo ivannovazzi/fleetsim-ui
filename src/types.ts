@@ -78,6 +78,7 @@ interface RoadFeature {
     name?: string;
     type?: string;
     speed_limit?: number;
+    highway?: string;
   };
 }
 

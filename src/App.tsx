@@ -9,7 +9,7 @@ import useContextMenu from "./hooks/useContextMenu";
 import ContextMenu from "./components/ContextMenu";
 
 export default function App() {
-  const [onContextClick, ref, xy, onCloseClick] = useContextMenu();
+  const [onContextClick, ref, xy, closeContextMenu] = useContextMenu();
   const [selectedRoad, setSelectedRoad] = useState<Road | null>(null);
   const [destination, setDestination] = useState<Position | null>(null);
   const [status, setStatus] = useState<
@@ -47,31 +47,52 @@ export default function App() {
   };
 
   const clearMap = () => {
-    onCloseClick();
+    closeContextMenu();
     setDestination(null);
     onUnselectVehicle();
+    setSelectedRoad(null);
   };
-
+  
+  const onDragStart = (e: React.MouseEvent, position: Position) => {
+    onContextClick(e);
+    setDestination(position);
+  };
+  const onDragEnd = (e: React.MouseEvent, position: Position) => {
+    closeContextMenu();
+    setDestination(null);
+  }
   const onRoadDestinationClick = async () => {
     const positions = selectedRoad!.streets.flat();
     const getOne = (arr: Position[]) =>
       arr[Math.floor(Math.random() * arr.length)];
 
-    await setFinalDestination(getOne(positions));
+    await setFinalDestination(getOne(positions), vehicles.map((v) => v.id),);
     clearMap();
   };
 
   const onPointDestinationClick = async () => {
-    await setFinalDestination(destination!);
+    await setFinalDestination(destination!, vehicles.map((v) => v.id),);
     clearMap();
   };
 
-  const setFinalDestination = async (position: Position) => {
-    const node = await client.getNode(position);
+  const onPointDestinationSingleClick = async () => {
+    await setFinalDestination(destination!, [filters.selected!]);
+    clearMap();
+  }
+
+
+  const onFindRoadClick = async () => {
+    const road = await client.findRoad(destination!);
+    setSelectedRoad(road.data);
+    closeContextMenu();
+  }
+
+  const setFinalDestination = async (position: Position, vehicleIds: string[]) => {
+    const coordinates = await client.getNode(position);
 
     await client.direction(
-      vehicles.map((v) => v.id),
-      node.data.coordinates
+      vehicleIds,
+      coordinates.data
     );
   };
 
@@ -133,7 +154,8 @@ export default function App() {
           modifiers={modifiers}
           onClick={onSelectVehicle}
           onMapClick={onMapClick}
-          onDragStart={onMapClick}
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
           onMapContextClick={onMapContextClick}
           selectedRoad={selectedRoad}
         />
@@ -146,9 +168,14 @@ export default function App() {
               padding: "0.5rem",
               backdropFilter: "blur(5px)",
               backgroundColor: "rgba(255, 255, 255, 0.05)",
+              borderRadius: "0.5rem"
             }}
           >
             <div onClick={onPointDestinationClick}>Find Directions To Here</div>
+            <div onClick={onFindRoadClick}>Identify this road</div>
+            {filters.selected && (
+              <div onClick={onPointDestinationSingleClick}>Find Directions To Road For Selected</div>
+            )}
           </div>
         </ContextMenu>
       )}

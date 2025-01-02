@@ -107,8 +107,12 @@ class SimulationService {
     return this.http.get<Road[]>("/roads");
   }
 
-  async getNode(position: Position): Promise<ApiResponse<Node>> {
-    return this.http.post<Position, Node>("/node", position);
+  async findRoad(position: Position): Promise<ApiResponse<Road>> {
+    return this.http.post<Position, Road>("/find-road", position);
+  }
+
+  async getNode(position: Position): Promise<ApiResponse<Position>> {
+    return this.http.post<Position, Position>("/node", position);
   }
 
   async getOptions(): Promise<ApiResponse<StartOptions>> {
