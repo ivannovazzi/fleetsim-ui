@@ -4,7 +4,7 @@ import { Filters } from "@/useVehicles";
 import { useNetwork } from "@/hooks/useNetwork";
 import { RoadNetworkMap } from "./RoadNetworkMap";
 import VehicleM from "./Vehicle";
-import Heatzones from "./Heatzones";
+import Heatzones from "./TrafficZones";
 import Route from "./Route";
 import RoadRenderer from "./Road";
 import Heatmap from "./Heatmap";
