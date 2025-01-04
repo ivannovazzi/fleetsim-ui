@@ -2,7 +2,6 @@ import { HttpClient } from "./httpClient";
 import { WebSocketClient } from "./wsClient";
 import {
   ApiResponse,
-  Node,
   StartOptions,
   SimulationStatus,
   VehicleDTO,
@@ -70,8 +69,8 @@ class SimulationService {
     this.ws.on("options", (data) => handler(data as StartOptions));
   }
   
-  onHeatzones(handler: (heatzones: string[]) => void): void {
-    this.ws.on("heatzones", (data) => handler(data as string[]));
+  onHeatzones(handler: (heatzones: Heatzone[]) => void): void {
+    this.ws.on("heatzones", (data) => handler(data as Heatzone[]));
   }
 
   onRoute(handler: (route: VehicleRoute) => void): void {
@@ -140,4 +139,10 @@ class SimulationService {
   }
 }
 
-export default new SimulationService(new HttpClient("http://localhost:3000"), new WebSocketClient("ws://localhost:8080"));
+// const host = "http://localhost:3000";
+// const wsHost = "ws://localhost:3000";
+
+const host = "https://fleetsim-jxx8.onrender.com";
+const wsHost = "wss://fleetsim-jxx8.onrender.com";
+
+export default new SimulationService(new HttpClient(host), new WebSocketClient(wsHost));

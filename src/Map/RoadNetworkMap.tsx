@@ -16,8 +16,6 @@ interface RoadNetworkMapProps {
   strokeOpacity?: number;
   children?: React.ReactNode;
   onClick?: (event: React.MouseEvent, position: Position ) => void;
-  onDragStart?: (event: React.MouseEvent, position: Position ) => void;
-  onDragEnd?: (event: React.MouseEvent, position: Position ) => void;
   onContextClick?: (event: React.MouseEvent, position: Position ) => void;
 }
 
@@ -28,8 +26,6 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
   strokeOpacity = 0.4,
   children,
   onClick,
-  onDragStart,
-  onDragEnd,
   onContextClick,
 }) => {
   const [svgRef, setSvgRef] = useState<SVGSVGElement | null>(null);

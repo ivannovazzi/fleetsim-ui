@@ -53,14 +53,6 @@ export default function App() {
     setSelectedRoad(null);
   };
   
-  const onDragStart = (e: React.MouseEvent, position: Position) => {
-    onContextClick(e);
-    setDestination(position);
-  };
-  const onDragEnd = (e: React.MouseEvent, position: Position) => {
-    closeContextMenu();
-    setDestination(null);
-  }
   const onRoadDestinationClick = async () => {
     const positions = selectedRoad!.streets.flat();
     const getOne = (arr: Position[]) =>
@@ -154,8 +146,6 @@ export default function App() {
           modifiers={modifiers}
           onClick={onSelectVehicle}
           onMapClick={onMapClick}
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
           onMapContextClick={onMapContextClick}
           selectedRoad={selectedRoad}
         />

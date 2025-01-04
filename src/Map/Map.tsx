@@ -16,8 +16,6 @@ interface MapProps {
   modifiers: Modifiers;
   selectedRoad: Road | null;
   onClick: (id: string) => void;
-  onDragStart: (event: React.MouseEvent, position: Position) => void;
-  onDragEnd: (event: React.MouseEvent, position: Position) => void;
   onMapClick?: (event: React.MouseEvent, position: Position) => void;
   onMapContextClick: (evt: React.MouseEvent, position: Position) => void;
 }
@@ -26,8 +24,6 @@ export default function Map({
   modifiers,
   filters,
   selectedRoad,
-  onDragStart,
-  onDragEnd,
   onMapClick,
   onMapContextClick,
   ...props
@@ -41,8 +37,6 @@ export default function Map({
       strokeColor="#444"
       strokeWidth={1.5}
       onClick={onMapClick}
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
       onContextClick={onMapContextClick}
     >
       {/* {destination && <Destination destination={destination} />} */}

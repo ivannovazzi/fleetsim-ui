@@ -22,8 +22,8 @@ export const Polyline: React.FC<PolylineProps> = ({
   useEffect(() => {
     if (!projection || !pathRef.current || coordinates.length < 2) return;
 
-    const points = coordinates.map(coord => projection(coord));
-    
+    const points = coordinates.map(coord => projection(coord)) as Position[];
+     
     const lineGenerator = d3.line()
       .x(d => d[0])
       .y(d => d[1]);
