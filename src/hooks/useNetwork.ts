@@ -1,9 +1,9 @@
-import { ClientDataContext } from "@/context";
+import useData from "@/DataProvider/useData";
 import client from "@/utils/client";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
 export function useNetwork() {
-  const {network, setNetwork} = useContext(ClientDataContext);
+  const {network, setNetwork} = useData();
   
   useEffect(() => {
     client.getNetwork().then((response) => {

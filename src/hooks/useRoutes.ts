@@ -1,10 +1,10 @@
-import { ClientDataContext } from "@/context";
+import useData from "@/DataProvider/useData";
 import { Route } from "@/types";
 import client from "@/utils/client";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
 export function useRoutes() {
-  const { routes, setRoutes } = useContext(ClientDataContext);
+  const { routes, setRoutes } = useData();
 
   useEffect(() => {
     client.getRoutes().then((routes) => {

@@ -1,11 +1,10 @@
-import { ClientDataContext } from "@/context";
+import useData from "@/DataProvider/useData";
 import { StartOptions } from "@/types";
 import client from "@/utils/client";
-import { useRef } from "react";
-import { useContext, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 export function useOptions(timeout: number) {
-  const { options, setOptions } = useContext(ClientDataContext);
+  const { options, setOptions } = useData();
   const timer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
