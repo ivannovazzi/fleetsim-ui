@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { MapContextValue, MapControlsContextValue } from "./types";
+import { OverlayContextValue, MapContextValue, MapControlsContextValue } from "./types";
 
 export const MapContext = createContext<MapContextValue>({
   projection: null,
@@ -12,4 +12,9 @@ export const MapControlsContext = createContext<MapControlsContextValue>({
   panTo: () => {},
   setZoom: () => {},
   setBounds: () => {},
+});
+
+export const OverlayContext = createContext<OverlayContextValue>({
+  htmlTransform: null,
+  mapHTMLElement: null,
 });

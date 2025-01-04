@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useMapContext } from "../hooks";
 
-function PoligonToPath(coordinates: [number, number][]) {
+function PoligonToPath(coordinates: Position[]) {
   return (
     coordinates
       .map(([x, y], i) => {
@@ -12,7 +12,7 @@ function PoligonToPath(coordinates: [number, number][]) {
 }
 
 interface PolygonProps {
-  coordinates: [number, number][];
+  coordinates: Position[];
   fill?: string;
   fillOpacity?: number;
   stroke?: string;
@@ -35,7 +35,7 @@ export const Polygon: React.FC<PolygonProps> = ({
 
     const projectedPoints = coordinates
       .map((coord) => projection(coord))
-      .filter((point) => point !== null) as [number, number][];
+      .filter((point) => point !== null) as Position[];
 
     if (projectedPoints.length === 0) return "";
 

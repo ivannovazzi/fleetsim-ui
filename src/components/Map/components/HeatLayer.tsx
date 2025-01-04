@@ -24,7 +24,7 @@ export default function HeatLayer({
   const density = useMemo(
     () =>
       d3
-        .contourDensity<[number, number]>()
+        .contourDensity<Position>()
         .x(d => d[0])
         .y(d => d[1])
         .bandwidth(bandwidth)
@@ -43,7 +43,7 @@ export default function HeatLayer({
   useEffect(() => {
     if (!projection || !heatmapRef.current || data.length === 0) return;
     
-    const points = data.map(v => projection(v) ?? [0, 0]) as [number, number][];        
+    const points = data.map(v => projection(v) ?? [0, 0]) as Position[];        
     const contours = density(points);
         
     colorScale.domain([0, d3.max(contours, d => d.value) ?? 1]);

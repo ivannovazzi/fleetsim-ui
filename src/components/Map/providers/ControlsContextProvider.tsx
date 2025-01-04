@@ -49,11 +49,11 @@ export function MapControlsProvider({
   );
 
   const setBounds = useCallback(
-    (bounds: [[number, number], [number, number]]) => {
+    (bounds: [Position, Position]) => {
       if (!projection || !svgRef || !zoomBehavior) return;
       const [[x0, y0], [x1, y1]] = bounds.map(projection) as [
-        [number, number],
-        [number, number]
+        Position,
+        Position
       ];
 
       // Get SVG dimensions

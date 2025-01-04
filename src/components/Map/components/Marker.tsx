@@ -5,7 +5,7 @@ import { useMapContext } from "../hooks";
 interface MarkerProps {
   position: Position;
   children?: React.ReactNode;
-  offset?: [number, number];
+  offset?: Position;
   animation?: number;
   onClick?: (e: React.MouseEvent<SVGGElement>) => void;
   onMouseEnter?: (e: React.MouseEvent<SVGGElement>) => void;

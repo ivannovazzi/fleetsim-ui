@@ -1,4 +1,4 @@
-import { Road } from "@/types";
+import { Position, Road } from "@/types";
 import { Polyline } from "@/components/Map/components/Polyline";
 import { useEffect } from "react";
 import { useMapControls } from "@/components/Map/hooks";
@@ -8,7 +8,9 @@ interface RouteProps {
   road: Road;
 }
 
-function getBounds(streets: [number, number][]): [[number, number], [number, number]] {
+function getBounds(
+  streets: Position[]
+): [Position, Position] {
   const bounds = {
     min: { x: Infinity, y: Infinity },
     max: { x: -Infinity, y: -Infinity },
@@ -25,19 +27,23 @@ function getBounds(streets: [number, number][]): [[number, number], [number, num
   ];
 }
 
-export default function RouteMap({ road }: RouteProps) {  
+export default function RouteMap({ road }: RouteProps) {
   const { setBounds } = useMapControls();
   useEffect(() => {
-    setBounds(getBounds(road.streets.flat()));    
+    setBounds(getBounds(road.streets.flat()));
   }, [road.streets, setBounds]);
   const lines = road.streets.map((street, i) => (
-    <Polyline
-      coordinates={street}
-      key={`street-${i}`}
-      color={"#fff"}
-    />
+    <Polyline coordinates={street} key={`street-${i}`} color={"#fff"} />
   ));
 
-  return <>{lines}<Label coordinates={road.streets.flat()} label={road.name}/> </>;
-  
+  return (
+    <>
+      {lines}
+      <Label
+        coordinates={road.streets.flat()}
+        label={road.name}
+        color={"#fff"}
+      />
+    </>
+  );
 }

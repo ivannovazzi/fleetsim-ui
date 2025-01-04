@@ -1,13 +1,10 @@
-import React, {
-  useEffect,
-  useState,
-  MouseEventHandler,
-} from "react";
+import React, { useEffect, useState, MouseEventHandler } from "react";
 import * as d3 from "d3";
 import { Position, RoadNetwork } from "@/types";
 import { useResizeObserver } from "@/hooks/useResizeObserver";
-import { MapControlsProvider } from "@/components/Map/ControlsContextProvider";
-import { MapContextProvider } from "@/components/Map/MapContextProvider";
+import { MapControlsProvider } from "../providers/ControlsContextProvider";
+import { MapContextProvider } from "../providers/MapContextProvider";
+import { OverlayProvider } from "../providers/OverlayContextProvider";
 
 interface RoadNetworkMapProps {
   data: RoadNetwork;
@@ -15,8 +12,8 @@ interface RoadNetworkMapProps {
   strokeWidth?: number;
   strokeOpacity?: number;
   children?: React.ReactNode;
-  onClick?: (event: React.MouseEvent, position: Position ) => void;
-  onContextClick?: (event: React.MouseEvent, position: Position ) => void;
+  onClick?: (event: React.MouseEvent, position: Position) => void;
+  onContextClick?: (event: React.MouseEvent, position: Position) => void;
 }
 
 export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
@@ -74,7 +71,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
       )
       .attr("stroke-opacity", strokeOpacity)
       .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")      
+      .attr("stroke-linecap", "round")
       .attr("id", (d, i) => (mainRoads.includes(d) ? `road-${i}` : null));
 
     const labelsGroup = roadsGroup
@@ -130,7 +127,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     const [sx, sy] = d3.pointer(evt, svgRef);
     const [mx, my] = transform.invert([sx, sy]);
     const coords = projection.invert?.([mx, my]);
-    if (!coords) return;    
+    if (!coords) return;
     onContextClick?.(evt, coords);
   };
 
@@ -141,22 +138,28 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
         zoomBehavior={zoom}
         projection={projection}
       >
-        <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
-          <svg
-            ref={(node) => setSvgRef(node)}
-            style={{
-              width: "100%",
-              height: "100%",
-              background: "#111",
-              display: "block",
-              cursor: "grab",
-            }}
-            onClick={onSvgClick}
-            onContextMenu={onSvgContextClick}            
-          >
-            <g className="markers">{children}</g>
-          </svg>
-        </div>
+        <OverlayProvider
+          projection={projection}
+          transform={transform}
+          getRef={() => containerRef.current}
+        >
+          <div ref={containerRef} style={{ width: "100%", height: "100%", position: "relative" }}>
+            <svg
+              ref={(node) => setSvgRef(node)}
+              style={{
+                width: "100%",
+                height: "100%",
+                background: "#111",
+                display: "block",
+                cursor: "grab",
+              }}
+              onClick={onSvgClick}
+              onContextMenu={onSvgContextClick}
+            >
+              <g className="markers">{children}</g>
+            </svg>
+          </div>
+        </OverlayProvider>
       </MapControlsProvider>
     </MapContextProvider>
   );

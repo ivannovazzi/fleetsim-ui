@@ -130,7 +130,7 @@ export function useVehicles(): UseVehicle {
 
   const mappedVehicles = vehicles.map((vehicle) => ({
     ...vehicle,
-    position: [vehicle.position[1], vehicle.position[0]] as [number, number],
+    position: [vehicle.position[1], vehicle.position[0]] as Position,
     visible:
       (filters.visible.length === 0 || filters.visible.includes(vehicle.id)) &&
       vehicle.name.includes(filters.filter),

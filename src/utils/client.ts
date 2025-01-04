@@ -139,10 +139,10 @@ class SimulationService {
   }
 }
 
-// const host = "http://localhost:3000";
-// const wsHost = "ws://localhost:3000";
+const host = "http://localhost:3000";
+const wsHost = "ws://localhost:3000";
 
-const host = "https://fleetsim-jxx8.onrender.com";
-const wsHost = "wss://fleetsim-jxx8.onrender.com";
+// const host = "https://fleetsim-jxx8.onrender.com";
+// const wsHost = "wss://fleetsim-jxx8.onrender.com";
 
 export default new SimulationService(new HttpClient(host), new WebSocketClient(wsHost));

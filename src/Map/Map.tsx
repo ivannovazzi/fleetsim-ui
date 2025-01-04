@@ -2,7 +2,7 @@ import { Modifiers, Position, Road, Vehicle } from "@/types";
 import { Filters } from "@/useVehicles";
 
 import { useNetwork } from "@/hooks/useNetwork";
-import { RoadNetworkMap } from "./RoadNetworkMap";
+import { RoadNetworkMap } from "@/components/Map/components/RoadNetworkMap";
 import VehicleM from "./Vehicle";
 import Heatzones from "./TrafficZones";
 import Route from "./Route";
@@ -39,7 +39,6 @@ export default function Map({
       onClick={onMapClick}
       onContextClick={onMapContextClick}
     >
-      {/* {destination && <Destination destination={destination} />} */}
       <Route selected={filters.selected} hovered={filters.hovered} />
       <Heatzones visible={modifiers.showHeatzones} />
       {modifiers.showVehicles &&

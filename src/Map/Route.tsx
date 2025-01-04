@@ -13,14 +13,13 @@ import Label from "@/components/Map/components/Label";
 
 function RouteLine({ route, color }: RouteLineProps) {
   const distance = `${route.distance.toFixed(1)} km`;
-  const coordinates = route.edges.map((edge) => edge.start.coordinates).map(invertLatLng);
+  const coordinates = route.edges
+    .map((edge) => edge.start.coordinates)
+    .map(invertLatLng);
   return (
     <>
-      <Polyline
-        coordinates={coordinates}
-        color={color}
-      />
-      <Label label={distance} coordinates={coordinates}/>
+      <Polyline coordinates={coordinates} color={color} />
+      <Label label={distance} coordinates={coordinates} color={color} />
     </>
   );
 }
@@ -47,7 +46,6 @@ export default function RouteMap({ selected, hovered }: RouteProps) {
     }
   }, [routes, hovered]);
 
-
   return (
     <>
       {hoveredRoute && (
@@ -63,7 +61,7 @@ export default function RouteMap({ selected, hovered }: RouteProps) {
           key={`${selected}--selected`}
           color={"#39f"}
         />
-      )}      
+      )}
     </>
   );
 }

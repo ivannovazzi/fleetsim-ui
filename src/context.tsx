@@ -6,7 +6,7 @@ type RouteMap = Map<string, Route>;
 interface ClientData {
   options: StartOptions;
   roads: Road[];
-  routes: Map<string, Route>;
+  routes: RouteMap;
   heatzones: Heatzone[];
   network: RoadNetwork;
   setOptions: React.Dispatch<React.SetStateAction<StartOptions>>;

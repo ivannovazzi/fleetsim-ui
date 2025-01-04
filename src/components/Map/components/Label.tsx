@@ -24,7 +24,7 @@ const Label: React.FC<LabelProps> = ({
   useEffect(() => {
     if (!projection || !textRef.current || !label || !coordinates) return;
 
-    let center: [number, number];
+    let center: Position;
     if (Array.isArray(coordinates[0])) {
       const pts = coordinates as Position[];
       const lngAvg = d3.mean(pts, d => d[0]) ?? 0;

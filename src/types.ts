@@ -3,7 +3,7 @@ export interface ApiResponse<T> {
   error?: string;
 }
 
-export type Position = [number, number];
+export type Position = Position;
 
 export type LatLng = {
   lat: number;
@@ -72,7 +72,7 @@ interface RoadFeature {
   type: "Feature";
   geometry: {
     type: "LineString";
-    coordinates: [number, number][];
+    coordinates: Position[];
   };
   properties: {
     name?: string;

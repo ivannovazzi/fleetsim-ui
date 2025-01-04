@@ -1,3 +1,17 @@
+.button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  background: #0b6055;
+  color: #fff;
+}
+
+.button:hover {
+  background: #3b9085;
+}
+
 .label {
   display: flex;
   flex-direction: column;

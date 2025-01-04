@@ -7,6 +7,8 @@ import styles from "./App.module.css";
 import { useVehicles } from "./useVehicles";
 import useContextMenu from "./hooks/useContextMenu";
 import ContextMenu from "./components/ContextMenu";
+import { Button } from "./components/Inputs";
+// import Overlay from "./components/Map/components/Overlay";
 
 export default function App() {
   const [onContextClick, ref, xy, closeContextMenu] = useContextMenu();
@@ -43,7 +45,7 @@ export default function App() {
     };
 
   const onMapClick = () => {
-    clearMap();    
+    clearMap();
   };
 
   const clearMap = () => {
@@ -52,40 +54,45 @@ export default function App() {
     onUnselectVehicle();
     setSelectedRoad(null);
   };
-  
+
   const onRoadDestinationClick = async () => {
     const positions = selectedRoad!.streets.flat();
     const getOne = (arr: Position[]) =>
       arr[Math.floor(Math.random() * arr.length)];
 
-    await setFinalDestination(getOne(positions), vehicles.map((v) => v.id),);
+    await setFinalDestination(
+      getOne(positions),
+      vehicles.map((v) => v.id)
+    );
     clearMap();
   };
 
   const onPointDestinationClick = async () => {
-    await setFinalDestination(destination!, vehicles.map((v) => v.id),);
+    await setFinalDestination(
+      destination!,
+      vehicles.map((v) => v.id)
+    );
     clearMap();
   };
 
   const onPointDestinationSingleClick = async () => {
     await setFinalDestination(destination!, [filters.selected!]);
     clearMap();
-  }
-
+  };
 
   const onFindRoadClick = async () => {
     const road = await client.findRoad(destination!);
     setSelectedRoad(road.data);
     closeContextMenu();
-  }
+  };
 
-  const setFinalDestination = async (position: Position, vehicleIds: string[]) => {
+  const setFinalDestination = async (
+    position: Position,
+    vehicleIds: string[]
+  ) => {
     const coordinates = await client.getNode(position);
 
-    await client.direction(
-      vehicleIds,
-      coordinates.data
-    );
+    await client.direction(vehicleIds, coordinates.data);
   };
 
   const onMapContextClick = (e: React.MouseEvent, position: Position) => {
@@ -158,17 +165,32 @@ export default function App() {
               padding: "0.5rem",
               backdropFilter: "blur(5px)",
               backgroundColor: "rgba(255, 255, 255, 0.05)",
-              borderRadius: "0.5rem"
+              borderRadius: "0.5rem",
+              gap: 3,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "stretch",
             }}
           >
-            <div onClick={onPointDestinationClick}>Find Directions To Here</div>
-            <div onClick={onFindRoadClick}>Identify this road</div>
+            <Button onClick={onPointDestinationClick}>
+              Find Directions To Here
+            </Button>
+            <Button onClick={onFindRoadClick}>Identify this road</Button>
             {filters.selected && (
-              <div onClick={onPointDestinationSingleClick}>Find Directions To Road For Selected</div>
+              <Button onClick={onPointDestinationSingleClick}>
+                Find Directions To Road For Selected
+              </Button>
             )}
           </div>
         </ContextMenu>
       )}
+
+
+      {/* {destination && <Overlay position={destination}>
+        <div style={{ background: "red", padding: "1rem" }}>
+          translateTo
+        </div>
+      </Overlay>} */}
     </div>
   );
 }
