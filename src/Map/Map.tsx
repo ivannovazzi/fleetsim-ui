@@ -5,7 +5,7 @@ import { useNetwork } from "@/hooks/useNetwork";
 import { RoadNetworkMap } from "@/components/Map/components/RoadNetworkMap";
 import VehicleM from "./Vehicle";
 import Heatzones from "./TrafficZones";
-import Route from "./Route";
+import Direction from "./Direction";
 import RoadRenderer from "./Road";
 import Heatmap from "./Heatmap";
 
@@ -33,13 +33,13 @@ export default function Map({
   return (
     <RoadNetworkMap
       data={network}
-      strokeOpacity={modifiers.showRoutes ? 0.4 : 0}
+      strokeOpacity={modifiers.showDirections ? 0.4 : 0}
       strokeColor="#444"
       strokeWidth={1.5}
       onClick={onMapClick}
       onContextClick={onMapContextClick}
     >
-      <Route selected={filters.selected} hovered={filters.hovered} />
+      <Direction selected={filters.selected} hovered={filters.hovered} />
       <Heatzones visible={modifiers.showHeatzones} />
       {modifiers.showVehicles &&
         props.vehicles?.map((vehicle) => (

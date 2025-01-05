@@ -131,8 +131,8 @@ export default function ControlPanel({
         <Item label="Show Network:">
           <Switch
             type="checkbox"
-            checked={modifiers.showRoutes}
-            onChange={eValue(onChangeModifiers("showRoutes"))}
+            checked={modifiers.showDirections}
+            onChange={eValue(onChangeModifiers("showDirections"))}
           />
         </Item>
         <Item label="Show Vehicles:">

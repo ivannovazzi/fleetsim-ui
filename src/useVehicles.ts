@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import client from "./utils/client";
-import { Modifiers, Vehicle, VehicleDTO } from "./types";
+import { Modifiers, Position, Vehicle, VehicleDTO } from "./types";
 
 export interface Filters {
   filter: string;
@@ -122,7 +122,7 @@ export function useVehicles(): UseVehicle {
   const [vehicles, setVehicles] = useVehicleChanges();
   const { filters, ...actions } = useFilters();
   const [modifiers, setModifiers] = useState<Modifiers>({
-    showRoutes: true,
+    showDirections: true,
     showHeatzones: false,
     showHeatmap: false,
     showVehicles: true,
@@ -133,7 +133,7 @@ export function useVehicles(): UseVehicle {
     position: [vehicle.position[1], vehicle.position[0]] as Position,
     visible:
       (filters.visible.length === 0 || filters.visible.includes(vehicle.id)) &&
-      vehicle.name.includes(filters.filter),
+      vehicle.name.toLowerCase().includes(filters.filter.toLowerCase()),
     selected: filters.selected === vehicle.id,
     hovered: filters.hovered === vehicle.id,
   }));

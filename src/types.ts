@@ -3,7 +3,7 @@ export interface ApiResponse<T> {
   error?: string;
 }
 
-export type Position = Position;
+export type Position = [number, number];
 
 export type LatLng = {
   lat: number;
@@ -11,7 +11,7 @@ export type LatLng = {
 };
 
 export interface Modifiers {
-  showRoutes: boolean;
+  showDirections: boolean;
   showHeatzones: boolean;
   showHeatmap: boolean;
   showVehicles: boolean;
@@ -106,9 +106,10 @@ export interface Edge {
   bearing: number;
 }
 
-export interface VehicleRoute {
+export interface VehicleDirection {
   vehicleId: string;
   route: Route;
+  eta: number;
 }
 
 export interface Road {

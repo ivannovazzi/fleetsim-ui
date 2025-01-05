@@ -18,6 +18,7 @@ function VehicleMarker({
   selected,
   hovered,
   heading,
+  visible,
   animFreq,
   scale,
   onClick,
@@ -39,6 +40,9 @@ function VehicleMarker({
     transform: `rotate(${prevHeading + rotation}deg) scale(${scale})`,
     transition: `transform ${animFreq}ms linear`,
   };
+
+  if(!visible) return null;
+  
   return (
     <Marker
       position={position}

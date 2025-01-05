@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useMapControls } from "@/components/Map/hooks";
 import Label from "@/components/Map/components/Label";
 
-interface RouteProps {
+interface DirectionProps {
   road: Road;
 }
 
@@ -27,7 +27,7 @@ function getBounds(
   ];
 }
 
-export default function RouteMap({ road }: RouteProps) {
+export default function DirectionMap({ road }: DirectionProps) {
   const { setBounds } = useMapControls();
   useEffect(() => {
     setBounds(getBounds(road.streets.flat()));

@@ -13,6 +13,7 @@ function OverlayComponent({ children, position }: OverlayProps) {
   if (!htmlTransform) return null;
 
   const [x, y] = htmlTransform(position);
+
   return createPortal(
     <div
       style={{
@@ -30,5 +31,7 @@ function OverlayComponent({ children, position }: OverlayProps) {
 
 export default React.memo(
   OverlayComponent,
-  (prev, next) => prev.position[0] === next.position[0] && prev.position[1] === next.position[1]
+  (prev, next) =>
+    prev.position[0] === next.position[0] &&
+    prev.position[1] === next.position[1]
 );

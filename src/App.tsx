@@ -8,7 +8,6 @@ import { useVehicles } from "./useVehicles";
 import useContextMenu from "./hooks/useContextMenu";
 import ContextMenu from "./components/ContextMenu";
 import { Button } from "./components/Inputs";
-// import Overlay from "./components/Map/components/Overlay";
 
 export default function App() {
   const [onContextClick, ref, xy, closeContextMenu] = useContextMenu();
@@ -90,7 +89,7 @@ export default function App() {
     position: Position,
     vehicleIds: string[]
   ) => {
-    const coordinates = await client.getNode(position);
+    const coordinates = await client.findNode(position);
 
     await client.direction(vehicleIds, coordinates.data);
   };
@@ -178,19 +177,12 @@ export default function App() {
             <Button onClick={onFindRoadClick}>Identify this road</Button>
             {filters.selected && (
               <Button onClick={onPointDestinationSingleClick}>
-                Find Directions To Road For Selected
+                Send selected vehicle here
               </Button>
             )}
           </div>
         </ContextMenu>
       )}
-
-
-      {/* {destination && <Overlay position={destination}>
-        <div style={{ background: "red", padding: "1rem" }}>
-          translateTo
-        </div>
-      </Overlay>} */}
     </div>
   );
 }

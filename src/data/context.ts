@@ -1,17 +1,17 @@
 import React from "react";
 import { Road, Route, Heatzone, StartOptions, RoadNetwork } from "@/types";
 
-export type RouteMap = Map<string, Route>;
+export type DirectionMap = Map<string, Route>;
 
 interface ClientData {
   options: StartOptions;
   roads: Road[];
-  routes: RouteMap;
+  directions: DirectionMap;
   heatzones: Heatzone[];
   network: RoadNetwork;
   setOptions: React.Dispatch<React.SetStateAction<StartOptions>>;
   setRoads: React.Dispatch<React.SetStateAction<Road[]>>;
-  setRoutes: React.Dispatch<React.SetStateAction<RouteMap>>;
+  setDirections: React.Dispatch<React.SetStateAction<DirectionMap>>;
   setHeatzones: React.Dispatch<React.SetStateAction<Heatzone[]>>;
   setNetwork: React.Dispatch<React.SetStateAction<RoadNetwork>>;
 }
@@ -30,7 +30,7 @@ export const ClientDataContext = React.createContext<ClientData>({
     heatZoneSpeedFactor: 0.5,
   },
   roads: [],
-  routes: new Map(),
+  directions: new Map(),
   heatzones: [],
   network: {
     type: "FeatureCollection",
@@ -38,7 +38,7 @@ export const ClientDataContext = React.createContext<ClientData>({
   },
   setOptions: () => {},
   setRoads: () => {},
-  setRoutes: () => {},
+  setDirections: () => {},
   setHeatzones: () => {},
   setNetwork: () => {},
 });

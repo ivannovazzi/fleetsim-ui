@@ -1,4 +1,4 @@
-import useData from "@/DataProvider/useData";
+import useData from "@/data/useData";
 import { StartOptions } from "@/types";
 import client from "@/utils/client";
 import { useRef, useEffect } from "react";

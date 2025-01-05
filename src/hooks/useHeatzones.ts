@@ -1,4 +1,4 @@
-import useData from "@/DataProvider/useData";
+import useData from "@/data/useData";
 import client from "@/utils/client";
 import { useEffect } from "react";
 

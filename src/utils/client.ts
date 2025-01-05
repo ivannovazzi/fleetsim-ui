@@ -5,7 +5,7 @@ import {
   StartOptions,
   SimulationStatus,
   VehicleDTO,
-  VehicleRoute,
+  VehicleDirection as Direction,
   Road,
   Position,
   Heatzone,
@@ -22,10 +22,10 @@ class SimulationService {
     this.reset = this.reset.bind(this);
     this.getStatus = this.getStatus.bind(this);
     this.getRoads = this.getRoads.bind(this);
-    this.getNode = this.getNode.bind(this);
+    this.findNode = this.findNode.bind(this);
     this.getOptions = this.getOptions.bind(this);
     this.updateOptions = this.updateOptions.bind(this);
-    this.getRoutes = this.getRoutes.bind(this);
+    this.getDirections = this.getDirections.bind(this);
     this.getHeatzones = this.getHeatzones.bind(this);
     this.makeHeatzones = this.makeHeatzones.bind(this);
     this.connectWebSocket = this.connectWebSocket.bind(this);
@@ -37,7 +37,7 @@ class SimulationService {
     this.onStatus = this.onStatus.bind(this);
     this.onOptions = this.onOptions.bind(this);
     this.onHeatzones = this.onHeatzones.bind(this);
-    this.onRoute = this.onRoute.bind(this);
+    this.onDirection = this.onDirection.bind(this);
     this.direction = this.direction.bind(this);    
   }
 
@@ -73,8 +73,8 @@ class SimulationService {
     this.ws.on("heatzones", (data) => handler(data as Heatzone[]));
   }
 
-  onRoute(handler: (route: VehicleRoute) => void): void {
-    this.ws.on("route", (data) => handler(data as VehicleRoute));
+  onDirection(handler: (direction: Direction) => void): void {
+    this.ws.on("direction", (data) => handler(data as Direction));
   } 
 
   async start(options: StartOptions): Promise<ApiResponse<void>> {
@@ -110,8 +110,8 @@ class SimulationService {
     return this.http.post<Position, Road>("/find-road", position);
   }
 
-  async getNode(position: Position): Promise<ApiResponse<Position>> {
-    return this.http.post<Position, Position>("/node", position);
+  async findNode(position: Position): Promise<ApiResponse<Position>> {
+    return this.http.post<Position, Position>("/find-node", position);
   }
 
   async getOptions(): Promise<ApiResponse<StartOptions>> {
@@ -122,8 +122,8 @@ class SimulationService {
     return this.http.post<StartOptions, void>("/options", options);
   }
 
-  async getRoutes(): Promise<ApiResponse<VehicleRoute[]>> {
-    return this.http.get<VehicleRoute[]>("/routes");
+  async getDirections(): Promise<ApiResponse<Direction[]>> {
+    return this.http.get<Direction[]>("/directions");
   }
 
   async getHeatzones(): Promise<ApiResponse<Heatzone[]>> {

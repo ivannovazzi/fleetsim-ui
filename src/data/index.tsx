@@ -1,6 +1,6 @@
 import React from "react";
 import { Road, Heatzone, StartOptions, RoadNetwork } from "../types";
-import { ClientDataContext, RouteMap } from "./context";
+import { ClientDataContext, DirectionMap } from "./context";
 
 export default function DataProvider({ children }: { children: React.ReactNode }) {
   const [options, setOptions] = React.useState<StartOptions>({
@@ -16,7 +16,7 @@ export default function DataProvider({ children }: { children: React.ReactNode }
     heatZoneSpeedFactor: 0.5,
   });
   const [roads, setRoads] = React.useState<Road[]>([]);
-  const [routes, setRoutes] = React.useState<RouteMap>(new Map());
+  const [directions, setDirections] = React.useState<DirectionMap>(new Map());
   const [heatzones, setHeatzones] = React.useState<Heatzone[]>([]);
   const [network, setNetwork] = React.useState<RoadNetwork>({
     type: "FeatureCollection",
@@ -28,12 +28,12 @@ export default function DataProvider({ children }: { children: React.ReactNode }
       value={{
         options,
         roads,
-        routes,
+        directions,
         heatzones,
         network,
         setOptions,
         setRoads,
-        setRoutes,
+        setDirections,
         setHeatzones,
         setNetwork,
       }}

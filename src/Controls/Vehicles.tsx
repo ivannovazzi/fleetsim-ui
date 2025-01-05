@@ -66,7 +66,7 @@ export default function VehicleList({
       />
       </div>
       <div className={styles.vehicles}>
-        {vehicles.map((vehicle) => (
+        {vehicles.filter(v => v.visible).map((vehicle) => (
           <div
             key={vehicle.id}
             className={classNames(styles.vehicle, {
