@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import client from "@/utils/client";
 import ControlPanel from "./Controls/Controls";
 import Map from "./Map/Map";
+import SearchBar from "./SearchBar";
 import { Modifiers, Position, Road, SimulationStatus } from "./types";
 import styles from "./App.module.css";
 import { useVehicles } from "./useVehicles";
@@ -132,15 +133,12 @@ export default function App() {
           vehicles={vehicles}
           connected={connected}
           modifiers={modifiers}
-          hasDirections={!!selectedRoad}
           filters={filters}
           onFilterChange={onFilterChange}
           onChangeModifiers={onChangeModifiers}
           onSelectVehicle={onSelectVehicle}
           onHoverVehicle={onHoverVehicle}
-          onUnhoverVehicle={onUnhoverVehicle}
-          onDestinationClick={onRoadDestinationClick}
-          onRoadSelect={(road) => setSelectedRoad(road)}
+          onUnhoverVehicle={onUnhoverVehicle}          
         />
       </div>
 
@@ -154,6 +152,11 @@ export default function App() {
           onMapClick={onMapClick}
           onMapContextClick={onMapContextClick}
           selectedRoad={selectedRoad}
+        />
+        <SearchBar
+        hasDirections={!!selectedRoad}
+        onDestinationClick={onRoadDestinationClick}
+        onRoadSelect={(road) => setSelectedRoad(road)}
         />
       </div>
       {xy && (

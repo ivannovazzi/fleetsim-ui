@@ -12,6 +12,34 @@
   background: #3b9085;
 }
 
+.squaredButton {
+  height: 30px;
+  width: 30px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;  
+  background: rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+.squaredButton:hover, .squaredButton:focus {
+  background: #0b6055;
+}
+
+.squaredButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.squaredButtonIcon {
+  height: 20px;
+  width: 20px;
+  fill: #999;
+}
+
+
 .label {
   display: flex;
   flex-direction: column;

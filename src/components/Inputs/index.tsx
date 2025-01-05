@@ -1,8 +1,24 @@
 import React from "react";
 import styles from "./Inputs.module.css";
+import classNames from "classnames";
 
 export function Button(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return <button className={styles.button} {...props} />;
+}
+
+interface SquaredButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  icon: React.ReactNode;
+}
+
+export function SquaredButton({ icon, ...props }: SquaredButtonProps) {
+  return (
+    <button type="button" {...props} className={classNames([styles.squaredButton, props.className])}>
+      <div className={styles.squaredButtonIcon}>
+        {icon}
+      </div>
+    </button>
+  );
 }
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -103,7 +119,7 @@ export function Typeahead<T>({
         onFocus={() => setIsOpen(true)}
         onChange={(e) => setInputValue(e.target.value)}
         onBlur={() => setIsOpen(false)}
-        className={styles.input}
+        className={classNames([styles.input, props.className])}
       />
       {isOpen && filtered.length > 0 && (
         <ul className={styles.dropdown}>

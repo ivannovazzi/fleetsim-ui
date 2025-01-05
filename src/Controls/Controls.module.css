@@ -7,6 +7,13 @@
   height: 270px;
 }
 
+.block {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 5px;
+  margin: 0px 5px;
+}
+
 .status,
 .vehicles,
 .options,
@@ -15,14 +22,10 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 0 5px;
 }
 
 .status {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  justify-content: space-between;
-  padding: 5px;
+  justify-content: space-between;  
 }
 .status p {
   margin: 5px 0;
@@ -31,8 +34,6 @@
 }
 
 .options {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
   padding: 10px;
   gap: 2px;
   display: grid;
@@ -66,35 +67,10 @@
 
 .buttons {
   display: flex;
-  gap: 8px;
+  flex-direction: row;
+  gap: 4px;
 }
 
-.squaredButton {
-  height: 30px;
-  width: 30px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;  
-  background: rgba(255, 255, 255, 0.1);
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.3s;
-}
-.squaredButton:hover, .squaredButton:focus {
-  background: #0b6055;
-}
-
-.squaredButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.squaredButtonIcon {
-  height: 20px;
-  width: 20px;
-  fill: #999;
-}
 
 .playPauseButton {
   background-color: #28a745; /* Green */
