@@ -4,8 +4,11 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.2s;
-  background: #0b6055;
   color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .button:hover {

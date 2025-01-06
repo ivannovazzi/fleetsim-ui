@@ -10,8 +10,9 @@ export default function DataProvider({ children }: { children: React.ReactNode }
     deceleration: 7,
     turnThreshold: 30,
     updateInterval: 10000,
-    updateServer: false,
-    updateServerTimeout: 10000,
+    useAdapter: false,
+    syncAdapter: false,
+    syncAdapterTimeout: 10000,
     speedVariation: 0.1,
     heatZoneSpeedFactor: 0.5,
   });

@@ -64,8 +64,9 @@ export interface StartOptions {
   turnThreshold: number;
   updateInterval: number;
   heatZoneSpeedFactor: number;
-  updateServer: boolean;
-  updateServerTimeout: number;
+  useAdapter: boolean;
+  syncAdapter: boolean;
+  syncAdapterTimeout: number;
 }
 
 interface RoadFeature {

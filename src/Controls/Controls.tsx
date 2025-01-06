@@ -6,7 +6,7 @@ import Vehicles from "./Vehicles";
 import { HeatZone, ZoomIn, ZoomOut } from "@/components/Icons";
 import { Filters } from "@/useVehicles";
 import { useOptions } from "@/hooks/useOptions";
-import { Input, Switch, Range, SquaredButton } from "@/components/Inputs";
+import { Input, Switch, Range, SquaredButton, Button } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
 import useTracking from "./useTracking";
 import { useMapControls } from "@/components/Map/hooks";
@@ -123,6 +123,9 @@ return (
       <Item label="Running:">{running ? "Yes" : "No"}</Item>
       <Item label="Vehicles:">{vehicles.length}</Item>
       <Item label="Update Interval:">{interval / 1000} sec</Item>
+      <Button onClick={client.reset}>Reset</Button>
+    </Block>
+    <Block className={styles.status}>
       <Item label="Show Network:">
         <Switch
           type="checkbox"
@@ -151,11 +154,18 @@ return (
           onChange={eValue(onChangeModifiers("showHeatzones"))}
         />
       </Item>
+      <Item label="Use Adapter:">
+        <Switch
+          type="checkbox"
+          checked={options.useAdapter}
+          onChange={handleChange("useAdapter")}
+        />
+      </Item>
       <Item label="Update Server:">
         <Switch
           type="checkbox"
-          checked={options.updateServer}
-          onChange={handleChange("updateServer")}
+          checked={options.syncAdapter}
+          onChange={handleChange("syncAdapter")}
         />
       </Item>
     </Block>
@@ -185,8 +195,8 @@ return (
         max={30000}
         step={1000}
         label="Update Server Timeout (ms):"
-        value={options.updateServerTimeout}
-        onChange={handleChange("updateServerTimeout")}
+        value={options.syncAdapterTimeout}
+        onChange={handleChange("syncAdapterTimeout")}
       />
       <Input
         min={10}
