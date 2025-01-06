@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { setMapControlsRef } from "./controls";
 import { MapControlsContextValue, PanToOptions } from "./types";
 import { MapControlsContext } from "./contexts";
+import { Position } from "@/types";
 
 interface Props {
   svgRef: SVGSVGElement | null;

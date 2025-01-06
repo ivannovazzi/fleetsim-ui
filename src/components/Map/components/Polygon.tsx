@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useMapContext } from "../hooks";
+import { Position } from "@/types";
 
 function PoligonToPath(coordinates: Position[]) {
   return (
