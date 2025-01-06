@@ -154,7 +154,7 @@ export default function App() {
           selectedRoad={selectedRoad}
         />
         <SearchBar
-        hasDirections={!!selectedRoad}
+        selectedRoad={selectedRoad}
         onDestinationClick={onRoadDestinationClick}
         onRoadSelect={(road) => setSelectedRoad(road)}
         />

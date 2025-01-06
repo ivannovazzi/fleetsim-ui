@@ -6,13 +6,13 @@ import { SquaredButton, Typeahead } from "@/components/Inputs";
 import styles from "./SearchBar.module.css";
 
 interface SearchBarProps {  
-  hasDirections?: boolean;
+  selectedRoad: Road | null;
   onDestinationClick: () => void;
   onRoadSelect: (road: Road) => void;
 }
 
 export default function SearchBar({
-  hasDirections,
+  selectedRoad,
   onDestinationClick,
   onRoadSelect,
 }: SearchBarProps) {
@@ -23,16 +23,17 @@ export default function SearchBar({
       <Typeahead
         className={styles.typeahead}
         options={roads}
-        onChange={(road) => onRoadSelect(road)}
+        value={selectedRoad}
+        onChange={(road) => onRoadSelect(road!)}
         onOptionHover={(road) => onRoadSelect(road!)}
-        renderOption={(item) => item.name}
+        renderOption={(item) => item!.name}
         placeholder="Search a road"
       />
       
       <SquaredButton
         onClick={onDestinationClick}
         icon={<Directions />}
-        disabled={!hasDirections}
+        disabled={!selectedRoad}
         className={styles.destinationButton}
       />
 

@@ -4,15 +4,15 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.2s;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: #eee;
+  background: var(--bg-1);
   display: inline-flex;
   justify-content: center;
   align-items: center;
 }
 
 .button:hover {
-  background: #3b9085;
+  background: var(--bg-primary);
 }
 
 .squaredButton {
@@ -21,7 +21,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;  
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-1);
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -60,11 +60,11 @@
   font-size: 0.9rem;
   height: 30px;
   transition: background 0.2s;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-1);
 }
 
 .input:focus {
-  background: #0b6055;
+  background: var(--bg-primary);
   outline: none;
 }
 
@@ -72,7 +72,7 @@ input[type="range"] {
   width: 100%;
   height: 30px;
   padding: 0px 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-1);
   border-radius: 4px;
   font-size: 0.9rem;
 }
@@ -94,7 +94,7 @@ input[type="range"]:focus {
 }
 
 input[type="range"]::-webkit-slider-thumb:active {
-  background: #3b9085;
+  background: var(--bg-primary);
 }
 
 
@@ -145,7 +145,7 @@ input[type="range"]::-webkit-slider-thumb:active {
    backdrop-filter: blur(5px);
    padding: 3px;
    border-radius: 4px;
-   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
    max-height: 400px;
     overflow-y: auto;
 }
@@ -158,6 +158,6 @@ input[type="range"]::-webkit-slider-thumb:active {
 }
 .option:hover {
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-1);
  
 }

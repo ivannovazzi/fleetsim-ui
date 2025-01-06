@@ -119,55 +119,57 @@ const handleStart = () => {
 return (
   <section className={styles.controlPanel}>
     <Block className={styles.status}>
-      <Item label="Connected:">{connected ? "Yes" : "No"}</Item>
-      <Item label="Running:">{running ? "Yes" : "No"}</Item>
-      <Item label="Vehicles:">{vehicles.length}</Item>
-      <Item label="Update Interval:">{interval / 1000} sec</Item>
-      <Button onClick={client.reset}>Reset</Button>
+      <Item label="Connected">{connected ? "Yes" : "No"}</Item>
+      <Item label="Running">{running ? "Yes" : "No"}</Item>
+      <Item label="Vehicles">{vehicles.length}</Item>
+      <Item label="Adapter">{interval / 1000} sec</Item>      
     </Block>
-    <Block className={styles.status}>
-      <Item label="Show Network:">
+    <Block className={styles.toggles}>
+      <Item label="Show Network">
         <Switch
           type="checkbox"
           checked={modifiers.showDirections}
           onChange={eValue(onChangeModifiers("showDirections"))}
         />
       </Item>
-      <Item label="Show Vehicles:">
+      <Item label="Show Vehicles">
         <Switch
           type="checkbox"
           checked={modifiers.showVehicles}
           onChange={eValue(onChangeModifiers("showVehicles"))}
         />
       </Item>
-      <Item label="Show Heatmap:">
+      <Item label="Show Heatmap">
         <Switch
           type="checkbox"
           checked={modifiers.showHeatmap}
           onChange={eValue(onChangeModifiers("showHeatmap"))}
         />
       </Item>
-      <Item label="Show Heatzones:">
+      <Item label="Show Heatzones">
         <Switch
           type="checkbox"
           checked={modifiers.showHeatzones}
           onChange={eValue(onChangeModifiers("showHeatzones"))}
         />
       </Item>
-      <Item label="Use Adapter:">
+      <Item label="Use Adapter">
         <Switch
           type="checkbox"
           checked={options.useAdapter}
           onChange={handleChange("useAdapter")}
         />
       </Item>
-      <Item label="Update Server:">
+      <Item label="Update Server">
         <Switch
           type="checkbox"
           checked={options.syncAdapter}
           onChange={handleChange("syncAdapter")}
         />
       </Item>
+      <div className={styles.resetButton}>      
+      <Button onClick={client.reset}>Reset</Button>
+      </div>
     </Block>
     <Block className={styles.vehicles}>
       <Vehicles

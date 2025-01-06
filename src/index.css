@@ -11,4 +11,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --bg-1: rgba(255, 255, 255, 0.1);
+  --bg-2: rgba(255, 255, 255, 0.2);
+  --shadow:  0 2px 4px rgba(0, 0, 0, 0.2);
+  --bg-primary: #0b6055;
 }

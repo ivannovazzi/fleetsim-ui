@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Inputs.module.css";
 import classNames from "classnames";
 
@@ -67,6 +67,7 @@ interface TypeaheadProps<T>
     "onChange" | "value"
   > {
   label?: string;
+  value?: T;
   options: T[];
   renderOption?: (option: T) => React.ReactNode;
   renderLabel?: (option: T) => string;
@@ -79,13 +80,11 @@ export function Typeahead<T>({
   options,
   renderLabel,
   renderOption,
+  value,
   onChange,
   onOptionHover = () => {},
   ...props
 }: TypeaheadProps<T>) {
-  const [inputValue, setInputValue] = React.useState("");
-  const [isOpen, setIsOpen] = React.useState(false);
-
   const getLabel = React.useCallback(
     (option: T) =>
       renderLabel
@@ -95,6 +94,13 @@ export function Typeahead<T>({
         : String(option),
     [renderLabel, renderOption]
   );
+  const [inputValue, setInputValue] = React.useState(value ? getLabel(value) : "");
+  const [isOpen, setIsOpen] = React.useState(false);
+  
+  useEffect(() => {
+    if (!value)
+      setInputValue("");
+  }, [value]);
 
   const filtered = React.useMemo(
     () =>

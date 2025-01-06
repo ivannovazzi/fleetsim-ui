@@ -14,7 +14,15 @@
   margin: 0px 5px;
 }
 
+.resetButton {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
 .status,
+.toggles,
 .vehicles,
 .options,
 .buttons,
@@ -25,8 +33,9 @@
 }
 
 .status {
-  justify-content: space-between;  
+  
 }
+
 .status p {
   margin: 5px 0;
   font-size: 0.95rem;
@@ -55,7 +64,9 @@
 }
 .itemLabel {
   font-size: 0.9rem;
-  color: #eee;
+  color: #ccc;
+  width: 120px;
+
 }
 .itemValue {
   display: flex;
@@ -80,8 +91,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-1);
   border-radius: 40px;
+}
+
+.playPauseButton:hover {
+  background: var(--bg-2);
 }
 
 
