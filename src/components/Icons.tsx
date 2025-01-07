@@ -24,10 +24,7 @@ export function Directions(props: SVGProps) {
 
 export function EngineIssues(props: SVGProps) {
   return (
-    <svg
-      {...props}
-      viewBox="0 -14.14 122.88 122.88"
-    >
+    <svg {...props} viewBox="0 -14.14 122.88 122.88">
       <g id="SVGRepo_iconCarrier">
         <path
           fillRule="evenodd"
@@ -41,7 +38,7 @@ export function EngineIssues(props: SVGProps) {
 
 export function LowFuel(props: SVGProps) {
   return (
-    <svg {...props} viewBox="0 0 24 24"  >
+    <svg {...props} viewBox="0 0 24 24">
       <g id="SVGRepo_iconCarrier">
         <path d="M3,2H6C6.28,2 6.53,2.11 6.71,2.29L8.79,4.38L9.59,3.59C10,3.2 10.5,3 11,3H17C17.5,3 18,3.2 18.41,3.59L19.41,4.59C19.8,5 20,5.5 20,6V19A2,2 0 0,1 18,21H8A2,2 0 0,1 6,19V13L6,12V8C6,7.5 6.2,7 6.59,6.59L7.38,5.79L5.59,4H3V2M11,5V7H17V5H11M11.41,11L9.41,9H8V10.41L10,12.41V15.59L8,17.59V19H9.41L11.41,17H14.59L16.59,19H18V17.59L16,15.59V12.41L18,10.41V9H16.59L14.59,11H11.41M12,13H14V15H12V13Z"></path>
       </g>
@@ -51,11 +48,7 @@ export function LowFuel(props: SVGProps) {
 
 export function LowBattery(props: SVGProps) {
   return (
-    <svg
-      {...props}
-      viewBox="0 0 512 512"
-      
-    >
+    <svg {...props} viewBox="0 0 512 512">
       <g id="SVGRepo_iconCarrier">
         <path d="M480 128h-32V80c0-8.84-7.16-16-16-16h-96c-8.84 0-16 7.16-16 16v48H192V80c0-8.84-7.16-16-16-16H80c-8.84 0-16 7.16-16 16v48H32c-17.67 0-32 14.33-32 32v256c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32V160c0-17.67-14.33-32-32-32zM192 264c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h112c4.42 0 8 3.58 8 8v16zm256 0c0 4.42-3.58 8-8 8h-40v40c0 4.42-3.58 8-8 8h-16c-4.42 0-8-3.58-8-8v-40h-40c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h40v-40c0-4.42 3.58-8 8-8h16c4.42 0 8 3.58 8 8v40h40c4.42 0 8 3.58 8 8v16z"></path>
       </g>
@@ -79,6 +72,34 @@ export function ZoomOut(props: SVGProps) {
       <g id="SVGRepo_iconCarrier">
         <path d="M18,15H6V13H18V15Z"></path>
       </g>
+    </svg>
+  );
+}
+
+export function Reset(props: SVGProps) {
+  return (
+    <svg {...props} viewBox="0 0 24 24">
+      <g id="SVGRepo_iconCarrier">
+        <path d="M12 16c1.671 0 3-1.331 3-3s-1.329-3-3-3-3 1.331-3 3 1.329 3 3 3z"></path>
+        <path d="M20.817 11.186a8.94 8.94 0 0 0-1.355-3.219 9.053 9.053 0 0 0-2.43-2.43 8.95 8.95 0 0 0-3.219-1.355 9.028 9.028 0 0 0-1.838-.18V2L8 5l3.975 3V6.002c.484-.002.968.044 1.435.14a6.961 6.961 0 0 1 2.502 1.053 7.005 7.005 0 0 1 1.892 1.892A6.967 6.967 0 0 1 19 13a7.032 7.032 0 0 1-.55 2.725 7.11 7.11 0 0 1-.644 1.188 7.2 7.2 0 0 1-.858 1.039 7.028 7.028 0 0 1-3.536 1.907 7.13 7.13 0 0 1-2.822 0 6.961 6.961 0 0 1-2.503-1.054 7.002 7.002 0 0 1-1.89-1.89A6.996 6.996 0 0 1 5 13H3a9.02 9.02 0 0 0 1.539 5.034 9.096 9.096 0 0 0 2.428 2.428A8.95 8.95 0 0 0 12 22a9.09 9.09 0 0 0 1.814-.183 9.014 9.014 0 0 0 3.218-1.355 8.886 8.886 0 0 0 1.331-1.099 9.228 9.228 0 0 0 1.1-1.332A8.952 8.952 0 0 0 21 13a9.09 9.09 0 0 0-.183-1.814z"></path>
+      </g>
+    </svg>
+  );
+}
+
+export function Pause(props: SVGProps) {
+  return (
+    <svg {...props} viewBox="0 0 24 24">
+      <rect x="6" y="4" width="4" height="16" />
+      <rect x="14" y="4" width="4" height="16" />
+    </svg>
+  );
+}
+
+export function Play(props: SVGProps) {
+  return (
+    <svg {...props} viewBox="0 0 24 24">
+      <path d="M8 5v14l11-7z" />
     </svg>
   );
 }

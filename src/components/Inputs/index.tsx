@@ -14,9 +14,7 @@ interface SquaredButtonProps
 export function SquaredButton({ icon, ...props }: SquaredButtonProps) {
   return (
     <button type="button" {...props} className={classNames([styles.squaredButton, props.className])}>
-      <div className={styles.squaredButtonIcon}>
-        {icon}
-      </div>
+      {React.cloneElement(icon as React.ReactElement, { className: styles.squaredButtonIcon })}
     </button>
   );
 }

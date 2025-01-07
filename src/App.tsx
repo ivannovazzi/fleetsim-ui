@@ -177,7 +177,7 @@ export default function App() {
             <Button onClick={onPointDestinationClick}>
               Find Directions To Here
             </Button>
-            <Button onClick={onFindRoadClick}>Identify this road</Button>
+            <Button onClick={onFindRoadClick}>Identify closest road</Button>
             {filters.selected && (
               <Button onClick={onPointDestinationSingleClick}>
                 Send selected vehicle here

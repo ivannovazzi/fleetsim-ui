@@ -14,19 +14,11 @@
   margin: 0px 5px;
 }
 
-.resetButton {
-  flex: 1;
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: column;
-}
-
 .status,
 .toggles,
 .vehicles,
 .options,
-.buttons,
-.mainButton {
+.buttons {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -47,12 +39,6 @@
   gap: 2px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-}
-
-.mainButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .item {
@@ -83,20 +69,22 @@
 }
 
 
-.playPauseButton {
-  background-color: #28a745; /* Green */
-  color: #ffffff;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--bg-1);
-  border-radius: 40px;
+.mainButton {
+  width: 60px !important;
+  height: 60px !important;    
 }
 
-.playPauseButton:hover {
-  background: var(--bg-2);
+.mainButton svg {
+  height: 40px;
+  width: 40px;
+}
+
+.mainButton:first-child {
+  border-radius: 10px 0px 0px 10px;
+}
+
+.mainButton:last-child {
+  border-radius: 0px 10px 10px 0px;
 }
 
 

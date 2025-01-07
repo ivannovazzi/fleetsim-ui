@@ -90,7 +90,7 @@ export default function VehicleList({
               <div className={styles.name}>{vehicle.name}</div>
               <div className={styles.flags}>
                 {vehicle.flags.hasEngineIssue && (
-                  <EngineIssues {...commonIconProps} fill="#cc9933" />
+                  <EngineIssues {...commonIconProps} fill="#cc9966" />
                 )}
                 {vehicle.flags.lowFuel && (
                   <LowFuel {...commonIconProps} fill="#33cc66" />
@@ -99,7 +99,7 @@ export default function VehicleList({
                   <LowBattery {...commonIconProps} fill="#cc3333cc" />
                 )}
                 {vehicle.flags.isInHeatZone && (
-                  <HeatZone {...commonIconProps} fill="#cc33ccff"/>
+                  <HeatZone {...commonIconProps} fill="#ff9900ff"/>
                 )}
               </div>
               <div className={styles.headingContainer}>

@@ -28,7 +28,7 @@
   transition: background-color 0.3s;
 }
 .squaredButton:hover, .squaredButton:focus {
-  background: #0b6055;
+  background: var(--bg-primary);
 }
 
 .squaredButton:disabled {
@@ -89,7 +89,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"]:focus {
-  background: #0b6055;
+  background: var(--bg-primary);
   outline: none;
 }
 
