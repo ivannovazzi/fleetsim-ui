@@ -1,7 +1,7 @@
 {
   "name": "fleetsim-ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,8 @@
     "d3": "^7.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "the-new-css-reset": "^1.11.3"
+    "the-new-css-reset": "^1.11.3",
+    "get:version": "node -p \"require('./package.json').version\""
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
