@@ -3,7 +3,7 @@ import client from "@/utils/client";
 import { Modifiers, StartOptions, Vehicle } from "@/types";
 import styles from "./Controls.module.css";
 import Vehicles from "./Vehicles";
-import { HeatZone, Pause, Play, Reset, ZoomIn, ZoomOut } from "@/components/Icons";
+import { HeatZone, Pause, Play, Reset } from "@/components/Icons";
 import { Filters } from "@/useVehicles";
 import { useOptions } from "@/hooks/useOptions";
 import {
@@ -14,7 +14,6 @@ import {
 } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
 import useTracking from "./useTracking";
-import { useMapControls } from "@/components/Map/hooks";
 import classNames from "classnames";
 
 interface BlockProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -96,7 +95,6 @@ export default function ControlPanel({
   onHoverVehicle,
   onUnhoverVehicle,
 }: ControlPanelProps) {
-  const { zoomIn, zoomOut } = useMapControls();
   const { options, updateOption } = useOptions(300);
 
   useTracking(vehicles, filters.selected, interval);
