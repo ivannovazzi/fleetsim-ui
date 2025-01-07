@@ -3,6 +3,7 @@ import client from "@/utils/client";
 import ControlPanel from "./Controls/Controls";
 import Map from "./Map/Map";
 import SearchBar from "./SearchBar";
+import Zoom from "./Zoom/"
 import { Modifiers, Position, Road, SimulationStatus } from "./types";
 import styles from "./App.module.css";
 import { useVehicles } from "./useVehicles";
@@ -158,6 +159,7 @@ export default function App() {
         onDestinationClick={onRoadDestinationClick}
         onRoadSelect={(road) => setSelectedRoad(road)}
         />
+        <Zoom />
       </div>
       {xy && (
         <ContextMenu position={xy}>

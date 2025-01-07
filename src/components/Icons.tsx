@@ -60,7 +60,7 @@ export function ZoomIn(props: SVGProps) {
   return (
     <svg {...props} viewBox="0 0 24 24">
       <g id="SVGRepo_iconCarrier">
-        <path d="M18,15H13V20H11V15H6V13H11V8H13V13H18V15Z"></path>
+        <path d="M4 10 L 10 10 L 10 4 L 14 4 L 14 10 L 20 10 L 20 14 L 14 14 L 14 20 L 10 20 L 10 14 L 4 14 Z "></path>
       </g>
     </svg>
   );
@@ -70,7 +70,7 @@ export function ZoomOut(props: SVGProps) {
   return (
     <svg {...props} viewBox="0 0 24 24">
       <g id="SVGRepo_iconCarrier">
-        <path d="M18,15H6V13H18V15Z"></path>
+        <path d="M4 10 L 20 10 L 20 14 L 4 14 Z"></path>
       </g>
     </svg>
   );

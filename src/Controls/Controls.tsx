@@ -11,7 +11,6 @@ import {
   Switch,
   Range,
   SquaredButton,
-  Button,
 } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
 import useTracking from "./useTracking";
@@ -48,14 +47,17 @@ function MainControls({
   running,
   onPlayPause,
   onReset,
+  onZones,
 }: {
   running: boolean;
   onPlayPause: () => void;
   onReset: () => void;
+  onZones: () => void;
 }) {
   return (
     <div>
       <SquaredButton onClick={onReset} icon={<Reset />} className={styles.mainButton} />
+      <SquaredButton onClick={onZones} icon={<HeatZone />} className={styles.mainButton} />
       <SquaredButton
         onClick={onPlayPause}
         className={styles.mainButton}
@@ -241,17 +243,15 @@ export default function ControlPanel({
           onChange={handleChange("speedVariation")}
         />
       </Block>
-      <Block className={styles.buttons}>
-        <SquaredButton onClick={client.makeHeatzones} icon={<HeatZone />} />
-        <SquaredButton onClick={zoomIn} icon={<ZoomIn />} />
-        <SquaredButton onClick={zoomOut} icon={<ZoomOut />} />
-      </Block>
+      <Block className={styles.mainControls}>
       
         <MainControls
           running={running}
           onPlayPause={running ? client.stop : handleStart}
           onReset={client.reset}
+          onZones={client.makeHeatzones}
         />
+      </Block>
       
     </section>
   );

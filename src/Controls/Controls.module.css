@@ -1,24 +1,26 @@
 .controlPanel {
-  background: #393939;
+  background: rgb(17, 17, 17);
   display: flex;
   flex-direction: row;
   width: 100%;
-  padding: 10px;
-  height: 270px;
+  height: 200px;
+  border-bottom: 0.5px solid #666;
 }
 
 .block {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  padding: 5px;
-  margin: 0px 5px;
+  padding: 10px;
+  border-right: 0.5px solid #666;
+}
+
+.block:last-child {
+  border-right: none;
 }
 
 .status,
 .toggles,
 .vehicles,
 .options,
-.buttons {
+.mainControls {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -39,6 +41,12 @@
   gap: 2px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+}
+
+.mainControls {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .item {
@@ -62,16 +70,10 @@
   color: #eee;
 }
 
-.buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-}
-
-
 .mainButton {
   width: 60px !important;
   height: 60px !important;    
+  border-radius: 0px;
 }
 
 .mainButton svg {
