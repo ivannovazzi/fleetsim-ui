@@ -148,20 +148,24 @@ export default function ControlPanel({
             onChange={eValue(onChangeModifiers("showHeatzones"))}
           />
         </Item>
-        <Item label="Use Adapter">
-          <Switch
-            type="checkbox"
-            checked={options.useAdapter}
-            onChange={handleChange("useAdapter")}
-          />
-        </Item>
-        <Item label="Update Server">
-          <Switch
-            type="checkbox"
-            checked={options.syncAdapter}
-            onChange={handleChange("syncAdapter")}
-          />
-        </Item>        
+        <div className={styles.danger}>
+          <Item label="Use Adapter">
+            <Switch
+              disabled={!options.editAdapter}
+              type="checkbox"
+              checked={options.useAdapter}
+              onChange={handleChange("useAdapter")}
+            />
+          </Item>
+          <Item label="Update Server">
+            <Switch
+              disabled={!options.editAdapter}
+              type="checkbox"
+              checked={options.syncAdapter}
+              onChange={handleChange("syncAdapter")}
+            />
+          </Item>        
+        </div>
       </Block>
       <Block className={styles.vehicles}>
         <Vehicles

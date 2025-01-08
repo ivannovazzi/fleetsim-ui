@@ -26,8 +26,13 @@
   justify-content: flex-start;
 }
 
-.status {
-  
+.danger {
+  border: 1px solid #f006;
+  border-radius: 10px;
+  margin: 0px -5px;
+  padding: 5px;
+  margin-top: 4px;
+  background: #f001;
 }
 
 .status p {
@@ -72,8 +77,8 @@
 
 .mainButton {
   width: 60px !important;
-  height: 60px !important;    
-  border-radius: 0px;
+  height: 60px !important;
+  margin: 0px 1px;  
 }
 
 .mainButton svg {
@@ -82,11 +87,11 @@
 }
 
 .mainButton:first-child {
-  border-radius: 10px 0px 0px 10px;
+  border-radius: 20px 3px 3px 20px;
 }
 
 .mainButton:last-child {
-  border-radius: 0px 10px 10px 0px;
+  border-radius: 3px 20px 20px 3px;
 }
 
 
