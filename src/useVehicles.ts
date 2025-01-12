@@ -126,6 +126,7 @@ export function useVehicles(): UseVehicle {
     showHeatzones: false,
     showHeatmap: false,
     showVehicles: true,
+    showPOIs: false,
   });
 
   const mappedVehicles = vehicles.map((vehicle) => ({

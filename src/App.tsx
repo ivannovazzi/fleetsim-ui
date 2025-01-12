@@ -3,17 +3,18 @@ import client from "@/utils/client";
 import ControlPanel from "./Controls/Controls";
 import Map from "./Map/Map";
 import SearchBar from "./SearchBar";
-import Zoom from "./Zoom/"
-import { Modifiers, Position, Road, SimulationStatus } from "./types";
+import Zoom from "./Zoom/";
+import { Modifiers, POI, Position, Road, SimulationStatus } from "./types";
 import styles from "./App.module.css";
 import { useVehicles } from "./useVehicles";
 import useContextMenu from "./hooks/useContextMenu";
 import ContextMenu from "./components/ContextMenu";
 import { Button } from "./components/Inputs";
+import { isRoad } from "./utils/general";
 
 export default function App() {
   const [onContextClick, ref, xy, closeContextMenu] = useContextMenu();
-  const [selectedRoad, setSelectedRoad] = useState<Road | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Road | POI | null>(null);
   const [destination, setDestination] = useState<Position | null>(null);
   const [status, setStatus] = useState<
     Pick<SimulationStatus, "interval" | "running">
@@ -53,16 +54,21 @@ export default function App() {
     closeContextMenu();
     setDestination(null);
     onUnselectVehicle();
-    setSelectedRoad(null);
+    setSelectedItem(null);
   };
 
-  const onRoadDestinationClick = async () => {
-    const positions = selectedRoad!.streets.flat();
-    const getOne = (arr: Position[]) =>
-      arr[Math.floor(Math.random() * arr.length)];
-
+  const onDestinationClick = async () => {
+    let coordinates: Position;
+    if (!selectedItem) return;
+    if (isRoad(selectedItem)) {
+      const getOne = (arr: Position[]) =>
+        arr[Math.floor(Math.random() * arr.length)];
+      coordinates = getOne(selectedItem.streets.flat());
+    } else {
+      coordinates = [selectedItem.coordinates[1], selectedItem.coordinates[0]];
+    }
     await setFinalDestination(
-      getOne(positions),
+      coordinates,
       vehicles.map((v) => v.id)
     );
     clearMap();
@@ -83,7 +89,7 @@ export default function App() {
 
   const onFindRoadClick = async () => {
     const road = await client.findRoad(destination!);
-    setSelectedRoad(road.data);
+    setSelectedItem(road.data);
     closeContextMenu();
   };
 
@@ -139,7 +145,7 @@ export default function App() {
           onChangeModifiers={onChangeModifiers}
           onSelectVehicle={onSelectVehicle}
           onHoverVehicle={onHoverVehicle}
-          onUnhoverVehicle={onUnhoverVehicle}          
+          onUnhoverVehicle={onUnhoverVehicle}
         />
       </div>
 
@@ -152,12 +158,12 @@ export default function App() {
           onClick={onSelectVehicle}
           onMapClick={onMapClick}
           onMapContextClick={onMapContextClick}
-          selectedRoad={selectedRoad}
+          selectedItem={selectedItem}
         />
         <SearchBar
-        selectedRoad={selectedRoad}
-        onDestinationClick={onRoadDestinationClick}
-        onRoadSelect={(road) => setSelectedRoad(road)}
+          selectedItem={selectedItem}
+          onDestinationClick={onDestinationClick}
+          onItemSelect={(item) => setSelectedItem(item)}
         />
         <Zoom />
       </div>

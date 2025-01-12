@@ -1,20 +1,23 @@
-import { Modifiers, Position, Road, Vehicle } from "@/types";
+import { Modifiers, POI, Position, Road, Vehicle } from "@/types";
 import { Filters } from "@/useVehicles";
 
 import { useNetwork } from "@/hooks/useNetwork";
 import { RoadNetworkMap } from "@/components/Map/components/RoadNetworkMap";
 import VehicleM from "./Vehicle";
-import Heatzones from "./TrafficZones";
+import TrafficZones from "./TrafficZones";
 import Direction from "./Direction";
 import RoadRenderer from "./Road";
 import Heatmap from "./Heatmap";
+import POIs from "./POIs";
+import { isPOI, isRoad } from "@/utils/general";
+import POIMarker from "./POI";
 
 interface MapProps {
   filters: Filters;
   vehicles: Vehicle[];
   animFreq: number;
   modifiers: Modifiers;
-  selectedRoad: Road | null;
+  selectedItem: Road | POI | null;
   onClick: (id: string) => void;
   onMapClick?: (event: React.MouseEvent, position: Position) => void;
   onMapContextClick: (evt: React.MouseEvent, position: Position) => void;
@@ -23,7 +26,7 @@ interface MapProps {
 export default function Map({
   modifiers,
   filters,
-  selectedRoad,
+  selectedItem,
   onMapClick,
   onMapContextClick,
   ...props
@@ -40,7 +43,8 @@ export default function Map({
       onContextClick={onMapContextClick}
     >
       <Direction selected={filters.selected} hovered={filters.hovered} />
-      <Heatzones visible={modifiers.showHeatzones} />
+      <TrafficZones visible={modifiers.showHeatzones} />
+      <POIs visible={modifiers.showPOIs}/>
       {modifiers.showVehicles &&
         props.vehicles?.map((vehicle) => (
           <VehicleM
@@ -52,7 +56,9 @@ export default function Map({
           />
         ))}
       {modifiers.showHeatmap && <Heatmap vehicles={props.vehicles} />}
-      {selectedRoad && <RoadRenderer road={selectedRoad} />}
+      {selectedItem && isRoad(selectedItem) && <RoadRenderer road={selectedItem} />}
+      {selectedItem && isPOI(selectedItem) && <POIMarker poi={selectedItem} />}
+
     </RoadNetworkMap>
   );
 }

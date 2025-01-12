@@ -1,39 +1,42 @@
 
-import { Road } from "@/types";
+import { POI, Road } from "@/types";
 import { Directions } from "@/components/Icons";
 import { useRoads } from "@/hooks/useRoads";
+import { usePois } from "@/hooks/usePois";
 import { SquaredButton, Typeahead } from "@/components/Inputs";
 import styles from "./SearchBar.module.css";
 
 interface SearchBarProps {  
-  selectedRoad: Road | null;
+  selectedItem: Road | POI | null;
   onDestinationClick: () => void;
-  onRoadSelect: (road: Road) => void;
+  onItemSelect: (item: Road | POI) => void;
 }
 
 export default function SearchBar({
-  selectedRoad,
+  selectedItem,
   onDestinationClick,
-  onRoadSelect,
+  onItemSelect,
 }: SearchBarProps) {
-  const { roads } = useRoads();  
-  
+  const { roads } = useRoads();
+  const { pois } = usePois();
+
   return (
     <div className={styles.searchBar}>
       <Typeahead
         className={styles.typeahead}
-        options={roads}
-        value={selectedRoad}
-        onChange={(road) => onRoadSelect(road!)}
-        onOptionHover={(road) => onRoadSelect(road!)}
+        options={[...roads, ...pois].flat()}
+        value={selectedItem}
+        onChange={(item) => onItemSelect(item!)}
+        onOptionHover={(item) => onItemSelect(item!)}
+        renderLabel={(item) => item!.name || "not sure"}
         renderOption={(item) => item!.name}
-        placeholder="Search a road"
+        placeholder="Search..."
       />
       
       <SquaredButton
         onClick={onDestinationClick}
         icon={<Directions />}
-        disabled={!selectedRoad}
+        disabled={!selectedItem}
         className={styles.destinationButton}
       />
 

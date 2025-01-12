@@ -34,7 +34,9 @@
   margin-top: 4px;
   background: #f001;
 }
-
+.status {
+  justify-content: space-between;
+}
 .status p {
   margin: 5px 0;
   font-size: 0.95rem;

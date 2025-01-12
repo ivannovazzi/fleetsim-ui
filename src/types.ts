@@ -15,6 +15,7 @@ export interface Modifiers {
   showHeatzones: boolean;
   showHeatmap: boolean;
   showVehicles: boolean;
+  showPOIs: boolean;
 }
 
 export enum VehicleStatus {
@@ -118,6 +119,13 @@ export interface Road {
   name: string;
   nodeIds: Set<string>;
   streets: Position[][];
+}
+
+export interface POI {
+  id: string;
+  name: string | null;
+  coordinates: Position;
+  type: string;
 }
 
 export interface Heatzone {
