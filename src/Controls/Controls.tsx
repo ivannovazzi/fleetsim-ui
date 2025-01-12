@@ -6,12 +6,7 @@ import Vehicles from "./Vehicles";
 import { HeatZone, Pause, Play, Reset } from "@/components/Icons";
 import { Filters } from "@/useVehicles";
 import { useOptions } from "@/hooks/useOptions";
-import {
-  Input,
-  Switch,
-  Range,
-  SquaredButton,
-} from "@/components/Inputs";
+import { Input, Switch, Range, SquaredButton } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
 import useTracking from "./useTracking";
 import classNames from "classnames";
@@ -55,8 +50,16 @@ function MainControls({
 }) {
   return (
     <div>
-      <SquaredButton onClick={onReset} icon={<Reset />} className={styles.mainButton} />
-      <SquaredButton onClick={onZones} icon={<HeatZone />} className={styles.mainButton} />
+      <SquaredButton
+        onClick={onReset}
+        icon={<Reset />}
+        className={styles.mainButton}
+      />
+      <SquaredButton
+        onClick={onZones}
+        icon={<HeatZone />}
+        className={styles.mainButton}
+      />
       <SquaredButton
         onClick={onPlayPause}
         className={styles.mainButton}
@@ -114,10 +117,30 @@ export default function ControlPanel({
   return (
     <section className={styles.controlPanel}>
       <Block className={styles.status}>
-        <Item label="Connected">{connected ? "Yes" : "No"}</Item>
-        <Item label="Running">{running ? "Yes" : "No"}</Item>
-        <Item label="Vehicles">{vehicles.length}</Item>
-        <Item label="Adapter">{interval / 1000} sec</Item>
+        <div>
+          <Item label="Connected">{connected ? "Yes" : "No"}</Item>
+          <Item label="Running">{running ? "Yes" : "No"}</Item>
+          <Item label="Vehicles">{vehicles.length}</Item>
+          <Item label="Adapter">{interval / 1000} sec</Item>
+        </div>
+        <div className={styles.danger}>
+          <Item label="Use Adapter">
+            <Switch
+              disabled={!options.editAdapter}
+              type="checkbox"
+              checked={options.useAdapter}
+              onChange={handleChange("useAdapter")}
+            />
+          </Item>
+          <Item label="Update Server">
+            <Switch
+              disabled={!options.editAdapter}
+              type="checkbox"
+              checked={options.syncAdapter}
+              onChange={handleChange("syncAdapter")}
+            />
+          </Item>
+        </div>
       </Block>
       <Block className={styles.toggles}>
         <Item label="Show Network">
@@ -148,24 +171,13 @@ export default function ControlPanel({
             onChange={eValue(onChangeModifiers("showHeatzones"))}
           />
         </Item>
-        <div className={styles.danger}>
-          <Item label="Use Adapter">
-            <Switch
-              disabled={!options.editAdapter}
-              type="checkbox"
-              checked={options.useAdapter}
-              onChange={handleChange("useAdapter")}
-            />
-          </Item>
-          <Item label="Update Server">
-            <Switch
-              disabled={!options.editAdapter}
-              type="checkbox"
-              checked={options.syncAdapter}
-              onChange={handleChange("syncAdapter")}
-            />
-          </Item>        
-        </div>
+        <Item label="Show POIs">
+          <Switch
+            type="checkbox"
+            checked={modifiers.showPOIs}
+            onChange={eValue(onChangeModifiers("showPOIs"))}
+          />
+        </Item>
       </Block>
       <Block className={styles.vehicles}>
         <Vehicles
@@ -246,7 +258,6 @@ export default function ControlPanel({
         />
       </Block>
       <Block className={styles.mainControls}>
-      
         <MainControls
           running={running}
           onPlayPause={running ? client.stop : handleStart}
@@ -254,7 +265,6 @@ export default function ControlPanel({
           onZones={client.makeHeatzones}
         />
       </Block>
-      
     </section>
   );
 }

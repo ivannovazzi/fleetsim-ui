@@ -127,7 +127,7 @@ export function Typeahead<T>({
       />
       {isOpen && filtered.length > 0 && (
         <ul className={styles.dropdown}>
-          {filtered.map((option, i) => (
+          {filtered.slice(0, 30).map((option, i) => (
             <li
               key={i}
               onMouseDown={(e) => {

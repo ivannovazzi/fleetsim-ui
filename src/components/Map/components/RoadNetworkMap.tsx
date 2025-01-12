@@ -113,6 +113,20 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     svg.call(zoomBehavior);
   }, [data, size, strokeColor, strokeWidth, strokeOpacity, svgRef]);
 
+
+const getBoundingBox = () => {
+  let boundingBox = [[0,0], [0,0]] as [Position, Position];
+  if (projection && transform && size.width && size.height) {
+    const topLeft = projection.invert?.(transform.invert([0, 0])) ?? [0, 0];
+    const bottomRight = projection.invert?.(
+      transform.invert([size.width, size.height])
+    ) ?? [0, 0];
+    boundingBox = [topLeft, bottomRight];
+  }
+  return boundingBox;
+}
+
+
   const onSvgClick: MouseEventHandler<SVGSVGElement> = (evt) => {
     if (!projection || !transform) return;
     const [sx, sy] = d3.pointer(evt, svgRef);
@@ -132,7 +146,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
   };
 
   return (
-    <MapContextProvider projection={projection} transform={transform}>
+    <MapContextProvider projection={projection} transform={transform} getBoundingBox={getBoundingBox}>
       <MapControlsProvider
         svgRef={svgRef}
         zoomBehavior={zoom}

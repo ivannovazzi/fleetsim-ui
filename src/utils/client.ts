@@ -10,6 +10,7 @@ import {
   Position,
   Heatzone,
   RoadNetwork,
+  POI,
 } from "@/types";
 
 class SimulationService {
@@ -22,6 +23,7 @@ class SimulationService {
     this.reset = this.reset.bind(this);
     this.getStatus = this.getStatus.bind(this);
     this.getRoads = this.getRoads.bind(this);
+    this.getPois = this.getPois.bind(this);
     this.findNode = this.findNode.bind(this);
     this.getOptions = this.getOptions.bind(this);
     this.updateOptions = this.updateOptions.bind(this);
@@ -104,6 +106,10 @@ class SimulationService {
 
   async getRoads(): Promise<ApiResponse<Road[]>> {
     return this.http.get<Road[]>("/roads");
+  }
+
+  async getPois(): Promise<ApiResponse<POI[]>> {
+    return this.http.get<POI[]>("/pois");
   }
 
   async findRoad(position: Position): Promise<ApiResponse<Road>> {
