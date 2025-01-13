@@ -103,3 +103,21 @@ export function Play(props: SVGProps) {
     </svg>
   );
 }
+
+export function POI(props: SVGProps) {
+  return (
+    <svg {...props} viewBox="0 0 24 24">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 3.09 2.61 7.13 7 12.19C16.39 16.13 19 12.09 19 9C19 5.13 15.87 2 12 2zM12 11c-1.66 0-3-1.34-3-3s1.34-3 3-3s3 1.34 3 3S13.66 11 12 11z"></path>
+    </svg>
+  );
+}
+
+export function Road(props: SVGProps) {
+  return (
+    <svg {...props} viewBox="0 0 343.006 343.006">
+      <polygon points="0,29.291 95.11,66.911 95.11,313.715 0,276.101 "></polygon>{" "}
+      <polygon points="123.948,66.911 219.049,29.291 219.049,276.101 123.948,313.715 "></polygon>
+      <polygon points="343.006,313.715 247.89,276.101 247.89,29.291 343.006,66.911 "></polygon>
+    </svg>
+  );
+}

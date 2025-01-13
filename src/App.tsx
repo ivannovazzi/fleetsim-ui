@@ -176,6 +176,7 @@ export default function App() {
           selectedItem={selectedItem}
           onDestinationClick={onDestinationClick}
           onItemSelect={(item) => setSelectedItem(item)}
+          onItemUnselect={() => setSelectedItem(null)}
         />
         <Zoom />
       </div>
