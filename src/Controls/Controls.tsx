@@ -6,7 +6,6 @@ import Vehicles from "./Vehicles";
 import { HeatZone, Pause, Play, Reset } from "@/components/Icons";
 import { Filters } from "@/hooks/useVehicles";
 import { useOptions } from "@/hooks/useOptions";
-import { useAdapter } from "@/hooks/useAdapter";
 import { Input, Switch, Range, SquaredButton } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
 import useTracking from "./useTracking";
