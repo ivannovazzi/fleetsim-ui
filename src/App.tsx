@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import client from "@/utils/client";
 import ControlPanel from "./Controls/Controls";
 import Map from "./Map/Map";
@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import Zoom from "./Zoom/";
 import { Modifiers, POI, Position, Road, SimulationStatus } from "./types";
 import styles from "./App.module.css";
-import { useVehicles } from "./useVehicles";
+import { useVehicles } from "./hooks/useVehicles";
 import useContextMenu from "./hooks/useContextMenu";
 import ContextMenu from "./components/ContextMenu";
 import { Button } from "./components/Inputs";
@@ -108,28 +108,39 @@ export default function App() {
   };
 
   useEffect(() => {
+    client.getVehicles().then((response) => {
+      setVehicles(response.data);
+    });
+  }, [setVehicles]);
+
+  const setUseAdapter = useCallback(
+    async (use: boolean) => {
+      await client.setUseAdapter(use);
+      client.getVehicles().then((response) => {
+        setVehicles(response.data);
+      });
+    },
+    [setVehicles]
+  );
+
+  useEffect(() => {
     client.onConnect(() => setConnected(true));
     client.onDisconnect(() => setConnected(false));
-
     client.onStatus((data) => {
       setStatus({ interval: data.interval, running: data.running });
-      setVehicles(data.vehicles);
     });
-
     client.getStatus().then((response) => {
       if (response.data) {
         setStatus({
           interval: response.data.interval,
           running: response.data.running,
         });
-        setVehicles(response.data.vehicles);
       }
     });
 
     client.connectWebSocket();
-
     return () => client.disconnect();
-  }, [setVehicles]);
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -146,6 +157,7 @@ export default function App() {
           onSelectVehicle={onSelectVehicle}
           onHoverVehicle={onHoverVehicle}
           onUnhoverVehicle={onUnhoverVehicle}
+          onAdapterChange={setUseAdapter}
         />
       </div>
 

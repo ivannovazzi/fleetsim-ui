@@ -4,8 +4,9 @@ import { Modifiers, StartOptions, Vehicle } from "@/types";
 import styles from "./Controls.module.css";
 import Vehicles from "./Vehicles";
 import { HeatZone, Pause, Play, Reset } from "@/components/Icons";
-import { Filters } from "@/useVehicles";
+import { Filters } from "@/hooks/useVehicles";
 import { useOptions } from "@/hooks/useOptions";
+import { useAdapter } from "@/hooks/useAdapter";
 import { Input, Switch, Range, SquaredButton } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
 import useTracking from "./useTracking";
@@ -83,6 +84,7 @@ interface ControlPanelProps {
   onHoverVehicle: (id: string) => void;
   onUnhoverVehicle: () => void;
   onFilterChange: (value: string) => void;
+  onAdapterChange: (value: boolean) => void;
 }
 
 export default function ControlPanel({
@@ -97,6 +99,7 @@ export default function ControlPanel({
   onSelectVehicle,
   onHoverVehicle,
   onUnhoverVehicle,
+  onAdapterChange,
 }: ControlPanelProps) {
   const { options, updateOption } = useOptions(300);
 
@@ -129,7 +132,7 @@ export default function ControlPanel({
               disabled={!options.editAdapter}
               type="checkbox"
               checked={options.useAdapter}
-              onChange={handleChange("useAdapter")}
+              onChange={(e) => onAdapterChange(e.target.checked)}
             />
           </Item>
           <Item label="Update Server">

@@ -1,5 +1,5 @@
 import { Modifiers, POI, Position, Road, Vehicle } from "@/types";
-import { Filters } from "@/useVehicles";
+import { Filters } from "@/hooks/useVehicles";
 
 import { useNetwork } from "@/hooks/useNetwork";
 import { RoadNetworkMap } from "@/components/Map/components/RoadNetworkMap";

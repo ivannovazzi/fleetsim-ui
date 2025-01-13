@@ -53,7 +53,6 @@ export type Vehicle = VehicleDTO & VehicleUIFlags;
 export interface SimulationStatus {
   interval: number;
   running: boolean;
-  vehicles: VehicleDTO[];
 }
 
 export interface StartOptions {

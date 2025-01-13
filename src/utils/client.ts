@@ -100,6 +100,10 @@ class SimulationService {
     return this.http.get<SimulationStatus>("/status");
   }
 
+  async getVehicles(): Promise<ApiResponse<VehicleDTO[]>> {
+    return this.http.get<VehicleDTO[]>("/vehicles");
+  }
+
   async getNetwork(): Promise<ApiResponse<RoadNetwork>> {
     return this.http.get<RoadNetwork>("/network");
   }
@@ -126,6 +130,10 @@ class SimulationService {
 
   async updateOptions(options: StartOptions): Promise<ApiResponse<void>> {
     return this.http.post<StartOptions, void>("/options", options);
+  }
+
+  async setUseAdapter(useAdapter: boolean): Promise<ApiResponse<VehicleDTO[]>> {
+    return this.http.post<{ useAdapter: boolean }, VehicleDTO[]>("/adapter", { useAdapter });
   }
 
   async getDirections(): Promise<ApiResponse<Direction[]>> {
