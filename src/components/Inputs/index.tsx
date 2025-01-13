@@ -65,12 +65,13 @@ interface TypeaheadProps<T>
     "onChange" | "value"
   > {
   label?: string;
-  value?: T;
+  value?: T | null;
   options: T[];
   renderOption?: (option: T) => React.ReactNode;
   renderLabel?: (option: T) => string;
   onChange: (option: T) => void;
-  onOptionHover?: (option: T | null) => void;
+  onOptionHover?: (option: T) => void;
+  onOptionLeave?: () => void;
 }
 
 export function Typeahead<T>({
@@ -81,6 +82,7 @@ export function Typeahead<T>({
   value,
   onChange,
   onOptionHover = () => {},
+  onOptionLeave = () => {},
   ...props
 }: TypeaheadProps<T>) {
   const getLabel = React.useCallback(
@@ -135,7 +137,7 @@ export function Typeahead<T>({
                 handleSelect(option);
               }}
               onMouseEnter={() => onOptionHover(option)}
-              onMouseLeave={() => onOptionHover(null)}
+              onMouseLeave={() => onOptionLeave()}
               className={styles.option}
             >
               {renderOption ? renderOption(option) : String(option)}
