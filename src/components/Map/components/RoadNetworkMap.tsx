@@ -1,17 +1,17 @@
-import React, { useEffect, useState, MouseEventHandler } from "react";
+import React, { useEffect, useState, MouseEventHandler, useContext } from "react";
 import * as d3 from "d3";
 import { Position, RoadNetwork } from "@/types";
 import { useResizeObserver } from "@/hooks/useResizeObserver";
 import { MapControlsProvider } from "../providers/ControlsContextProvider";
 import { MapContextProvider } from "../providers/MapContextProvider";
 import { OverlayProvider } from "../providers/OverlayContextProvider";
-
 interface RoadNetworkMapProps {
   data: RoadNetwork;
   strokeColor?: string;
   strokeWidth?: number;
   strokeOpacity?: number;
   children?: React.ReactNode;
+  htmlMarkers?: React.ReactNode;
   onClick?: (event: React.MouseEvent, position: Position) => void;
   onContextClick?: (event: React.MouseEvent, position: Position) => void;
 }
@@ -24,6 +24,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
   children,
   onClick,
   onContextClick,
+  htmlMarkers,
 }) => {
   const [svgRef, setSvgRef] = useState<SVGSVGElement | null>(null);
   const [projection, setProjection] = useState<d3.GeoProjection | null>(null);
@@ -79,26 +80,12 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
       .attr("class", "street-labels")
       .style("opacity", 0.4);
 
-    // labelsGroup
-    //   .selectAll("text")
-    //   .data(mainRoads)
-    //   .enter()
-    //   .append("text")
-    //   .attr("dy", 0)
-    //   .attr("fill", "#eee")
-    //   .attr("font-size", "2px")
-    //   .attr("text-anchor", "middle")
-    //   .append("textPath")
-    //   .attr("xlink:href", (d, i) => `#road-${i}`)
-    //   .attr("startOffset", "50%")
-    //   .text(d => d.properties.name!);
-
     const markersGroup = svg.select<SVGGElement>("g.markers");
 
     // Simplified zoom handler
     const zoomBehavior = d3
       .zoom<SVGSVGElement, unknown>()
-      .scaleExtent([1, 8])
+      .scaleExtent([1, 15])
       .on("zoom", (evt) => {
         requestAnimationFrame(() => {
           roadsGroup.attr("transform", evt.transform.toString());
@@ -113,19 +100,24 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     svg.call(zoomBehavior);
   }, [data, size, strokeColor, strokeWidth, strokeOpacity, svgRef]);
 
+  const getBoundingBox = () => {
+    let boundingBox = [
+      [0, 0],
+      [0, 0],
+    ] as [Position, Position];
+    if (projection && transform && size.width && size.height) {
+      const topLeft = projection.invert?.(transform.invert([0, 0])) ?? [0, 0];
+      const bottomRight = projection.invert?.(
+        transform.invert([size.width, size.height])
+      ) ?? [0, 0];
+      boundingBox = [topLeft, bottomRight];
+    }
+    return boundingBox;
+  };
 
-const getBoundingBox = () => {
-  let boundingBox = [[0,0], [0,0]] as [Position, Position];
-  if (projection && transform && size.width && size.height) {
-    const topLeft = projection.invert?.(transform.invert([0, 0])) ?? [0, 0];
-    const bottomRight = projection.invert?.(
-      transform.invert([size.width, size.height])
-    ) ?? [0, 0];
-    boundingBox = [topLeft, bottomRight];
-  }
-  return boundingBox;
-}
-
+  const getZoom = () => {
+    return transform?.k ?? 0;
+  };
 
   const onSvgClick: MouseEventHandler<SVGSVGElement> = (evt) => {
     if (!projection || !transform) return;
@@ -145,8 +137,14 @@ const getBoundingBox = () => {
     onContextClick?.(evt, coords);
   };
 
+  // divide children by MArker and HTMLMarker
   return (
-    <MapContextProvider projection={projection} transform={transform} getBoundingBox={getBoundingBox}>
+    <MapContextProvider
+      projection={projection}
+      transform={transform}
+      getBoundingBox={getBoundingBox}
+      getZoom={getZoom}
+    >
       <MapControlsProvider
         svgRef={svgRef}
         zoomBehavior={zoom}
@@ -157,7 +155,10 @@ const getBoundingBox = () => {
           transform={transform}
           getRef={() => containerRef.current}
         >
-          <div ref={containerRef} style={{ width: "100%", height: "100%", position: "relative" }}>
+          <div
+            ref={containerRef}
+            style={{ width: "100%", height: "100%", position: "relative" }}
+          >
             <svg
               ref={(node) => setSvgRef(node)}
               style={{
@@ -170,8 +171,11 @@ const getBoundingBox = () => {
               onClick={onSvgClick}
               onContextMenu={onSvgContextClick}
             >
-              <g className="markers">{children}</g>
+              <g className="markers">
+                {children}
+              </g>
             </svg>
+            {htmlMarkers}
           </div>
         </OverlayProvider>
       </MapControlsProvider>

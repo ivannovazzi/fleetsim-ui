@@ -1,0 +1,24 @@
+.poi {
+  animation: fadeIn 0.5s ease-in-out forwards;
+  opacity: 0;
+  height: 10px;
+  width: 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  margin-left: -5px;
+  margin-top: -5px;
+  padding-top:-10px;
+}
+
+.icon {
+  fill: #fffd;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

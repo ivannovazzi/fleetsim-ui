@@ -5,6 +5,7 @@ export const MapContext = createContext<MapContextValue>({
   projection: null,
   transform: null,
   getBoundingBox: () => [[0,0], [0,0]],
+  getZoom: () => 0,
 });
 
 export const MapControlsContext = createContext<MapControlsContextValue>({

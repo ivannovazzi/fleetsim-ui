@@ -1,26 +1,65 @@
 import { useMapContext } from "@/components/Map/hooks";
 import { usePois } from "@/hooks/usePois";
-import POIMarker from "./POI";
+import POIMarker from "./POI/POI";
+import { Position } from "@/types";
+
+function areCoordinatesNear(
+  [lat1, lng1]: Position,
+  [lat2, lng2]: Position,
+  minDistance = 0.0001
+) {
+  return (
+    Math.abs(lat1 - lat2) < minDistance && Math.abs(lng1 - lng2) < minDistance
+  );
+}
+
+function distanceToCenter(
+  [lat, lng]: Position,
+  [centerLat, centerLng]: Position
+) {
+  return Math.sqrt((lat - centerLat) ** 2 + (lng - centerLng) ** 2);
+}
+
+function zoomToDistance(zoom: number) {
+  return 0.00002 * 2 ** (14 - zoom);
+}
 
 export default function POIs({ visible }: { visible: boolean }) {
   const { pois } = usePois();
-  const { getBoundingBox } = useMapContext(); // Assume map controls provide bounding box
+  const { getBoundingBox, getZoom } = useMapContext();
   if (!visible) return null;
 
-  const bbox = getBoundingBox();
-  const inBoundsPois = pois.filter((poi) => {
-    const [lat, lng] = poi.coordinates;
+  const [[west, north], [east, south]] = getBoundingBox();
+  const zoom = getZoom();
+  const centerLat = (north + south) / 2;
+  const centerLng = (west + east) / 2;
 
-    const north = bbox[0][1];
-    const south = bbox[1][1];
-    const east = bbox[1][0];
-    const west = bbox[0][0];
-    return lat >= south && lat <= north && lng >= west && lng <= east;
-  });
+  const inBoundsPois = pois.filter(
+    ({ coordinates: [lat, lng] }) =>
+      lat >= south && lat <= north && lng >= west && lng <= east
+  );
 
-  const limitedPois = inBoundsPois.slice(0, 30);
+  const uniquePois: typeof inBoundsPois = [];
 
-  return limitedPois.map((poi) => (
-    <POIMarker key={poi.id} poi={poi} />
-  ));
+  for (const poi of inBoundsPois) {
+    if (
+      !uniquePois.some((existing) =>
+        areCoordinatesNear(
+          existing.coordinates,
+          poi.coordinates,
+          zoomToDistance(zoom)
+        )
+      )
+    ) {
+      uniquePois.push(poi);
+    }
+  }
+
+  uniquePois.sort(
+    (a, b) =>
+      distanceToCenter(a.coordinates, [centerLat, centerLng]) -
+      distanceToCenter(b.coordinates, [centerLat, centerLng])
+  );
+
+  return uniquePois.map((poi) => <POIMarker key={poi.id} poi={poi} />);
 }

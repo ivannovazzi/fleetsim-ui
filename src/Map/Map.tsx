@@ -10,7 +10,7 @@ import RoadRenderer from "./Road";
 import Heatmap from "./Heatmap";
 import POIs from "./POIs";
 import { isPOI, isRoad } from "@/utils/general";
-import POIMarker from "./POI";
+import POIMarker from "./POI/POI";
 
 interface MapProps {
   filters: Filters;
@@ -41,10 +41,11 @@ export default function Map({
       strokeWidth={1.5}
       onClick={onMapClick}
       onContextClick={onMapContextClick}
+      htmlMarkers={<POIs visible={modifiers.showPOIs} />}
     >
       <Direction selected={filters.selected} hovered={filters.hovered} />
       <TrafficZones visible={modifiers.showHeatzones} />
-      <POIs visible={modifiers.showPOIs}/>
+
       {modifiers.showVehicles &&
         props.vehicles?.map((vehicle) => (
           <VehicleM
@@ -56,9 +57,10 @@ export default function Map({
           />
         ))}
       {modifiers.showHeatmap && <Heatmap vehicles={props.vehicles} />}
-      {selectedItem && isRoad(selectedItem) && <RoadRenderer road={selectedItem} />}
+      {selectedItem && isRoad(selectedItem) && (
+        <RoadRenderer road={selectedItem} />
+      )}
       {selectedItem && isPOI(selectedItem) && <POIMarker poi={selectedItem} />}
-
     </RoadNetworkMap>
   );
 }
