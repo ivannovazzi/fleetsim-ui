@@ -1,65 +1,60 @@
 import { useMapContext } from "@/components/Map/hooks";
 import { usePois } from "@/hooks/usePois";
 import POIMarker from "./POI/POI";
-import { Position } from "@/types";
+import { POI } from "@/types";
 
-function areCoordinatesNear(
-  [lat1, lng1]: Position,
-  [lat2, lng2]: Position,
-  minDistance = 0.0001
-) {
-  return (
-    Math.abs(lat1 - lat2) < minDistance && Math.abs(lng1 - lng2) < minDistance
-  );
+/** Returns the Euclidean distance in pixels between two points. */
+function distancePx(x1: number, y1: number, x2: number, y2: number) {
+  return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
 }
 
-function distanceToCenter(
-  [lat, lng]: Position,
-  [centerLat, centerLng]: Position
-) {
-  return Math.sqrt((lat - centerLat) ** 2 + (lng - centerLng) ** 2);
+
+interface POIMarkerProps {
+  visible: boolean;
+  onClick: (poi: POI) => void;
 }
 
-function zoomToDistance(zoom: number) {
-  return 0.00002 * 2 ** (14 - zoom);
-}
-
-export default function POIs({ visible }: { visible: boolean }) {
+export default function POIs({ visible, onClick }: POIMarkerProps) {
   const { pois } = usePois();
-  const { getBoundingBox, getZoom } = useMapContext();
-  if (!visible) return null;
+  const { getBoundingBox, projection, transform } = useMapContext();
+
+  if (!visible || !projection || !transform) return null;
 
   const [[west, north], [east, south]] = getBoundingBox();
-  const zoom = getZoom();
-  const centerLat = (north + south) / 2;
-  const centerLng = (west + east) / 2;
 
   const inBoundsPois = pois.filter(
     ({ coordinates: [lat, lng] }) =>
       lat >= south && lat <= north && lng >= west && lng <= east
   );
 
-  const uniquePois: typeof inBoundsPois = [];
+  const minPxDistance = 120;
+
+  const placedPois: Array<{
+    poi: typeof inBoundsPois[number];
+    px: number;
+    py: number;
+  }> = [];
 
   for (const poi of inBoundsPois) {
-    if (
-      !uniquePois.some((existing) =>
-        areCoordinatesNear(
-          existing.coordinates,
-          poi.coordinates,
-          zoomToDistance(zoom)
-        )
-      )
-    ) {
-      uniquePois.push(poi);
+    const [lat, lng] = poi.coordinates;    
+    const projected = projection([lng, lat]);
+    
+    if (!projected) continue;    
+    const [px, py] = transform.apply(projected);
+    
+    const tooClose = placedPois.some(({ px: x2, py: y2 }) => {
+      return distancePx(px, py, x2, y2) < minPxDistance;
+    });
+    if (!tooClose) {
+      placedPois.push({ poi, px, py });
     }
   }
 
-  uniquePois.sort(
-    (a, b) =>
-      distanceToCenter(a.coordinates, [centerLat, centerLng]) -
-      distanceToCenter(b.coordinates, [centerLat, centerLng])
+  return (
+    <>
+      {placedPois.map(({ poi }) => (
+        <POIMarker key={poi.id} poi={poi} onClick={() => onClick(poi)}/>
+      ))}
+    </>
   );
-
-  return uniquePois.map((poi) => <POIMarker key={poi.id} poi={poi} />);
 }

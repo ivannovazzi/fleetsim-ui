@@ -1,7 +1,6 @@
 import { Craft, Leisure, Office, Shop, Unknown } from "@/components/Icons";
 import styles from "./POI.module.css";
-import { Marker } from "@/components/Map/components/Marker";
-import { POI } from "@/types";
+import { POI, Position } from "@/types";
 import React from "react";
 import HTMLMarker from "@/components/Map/components/HTMLMarker";
 
@@ -23,8 +22,6 @@ function getFillByType(type: string) {
 function IconByType({ type }: { type: string }) {
   const svgProps = {
     className: styles.icon,
-    width: "10px",
-    height: "10px",
   };
 
   let icon = <Unknown />;
@@ -41,10 +38,17 @@ function IconByType({ type }: { type: string }) {
   return React.cloneElement(icon, svgProps);
 }
 
-export default function POIMarker({ poi }: { poi: POI }) {
+interface POIMarkerProps {
+  poi: POI;
+  showLabel?: boolean;
+  onClick?: () => void;
+}
+export default function POIMarker({ poi, showLabel, onClick }: POIMarkerProps) {
+  const position = [poi.coordinates[1], poi.coordinates[0]] as Position;
   return (
-    <HTMLMarker key={poi.id} position={[poi.coordinates[1], poi.coordinates[0]]}>
-      <div className={styles.poi} style={{ background: getFillByType(poi.type) }}>
+    <HTMLMarker key={poi.id} position={position} onClick={onClick}>
+      {showLabel && <div className={styles.label}>{poi.name}</div>}
+      <div className={styles.poi} style={{ background: getFillByType(poi.type) }}>        
         <IconByType type={poi.type} />
       </div>
     </HTMLMarker>

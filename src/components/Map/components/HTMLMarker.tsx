@@ -2,18 +2,17 @@ import React, { useRef, useEffect } from "react";
 import { useMapContext } from "../hooks";
 import { Position } from "@/types";
 
-interface HtmlMarkerProps {
+interface HtmlMarkerProps extends React.HTMLAttributes<HTMLDivElement> {
   position: Position;
   offset?: [number, number];
-  className?: string;
   children?: React.ReactNode;
 }
 
 export default function HTMLMarker({
   position,
   offset = [0, 0],
-  className,
   children,
+  ...props 
 }: HtmlMarkerProps) {
   const { projection, transform } = useMapContext();
   const markerRef = useRef<HTMLDivElement>(null);
@@ -22,14 +21,12 @@ export default function HTMLMarker({
     if (!markerRef.current || !projection || !transform) return;
     const [x, y] = projection(position) ?? [0, 0];
     const [screenX, screenY] = transform.apply([x, y]);
-    markerRef.current.style.transform = `translate(${screenX}px, ${screenY}px)`;
-    markerRef.current.style.position = "absolute";
-    markerRef.current.style.left = `${offset[0]}px`;
-    markerRef.current.style.top = `${offset[1]}px`;
+    markerRef.current.style.transform = `translate3d(${screenX + offset[0]}px, ${screenY + offset[1]}px, 0)`;
+
   }, [position, offset, projection, transform]);
 
   return (
-    <div ref={markerRef} className={className}>
+    <div ref={markerRef} style={{ position: 'absolute', left: 0, top: 0 }} {...props}>
       {children}
     </div>
   );

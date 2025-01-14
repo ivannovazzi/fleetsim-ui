@@ -167,10 +167,11 @@ export default function App() {
           vehicles={vehicles}
           filters={filters}
           modifiers={modifiers}
+          selectedItem={selectedItem}
           onClick={onSelectVehicle}
           onMapClick={onMapClick}
           onMapContextClick={onMapContextClick}
-          selectedItem={selectedItem}
+          onPOIClick={(poi) => setSelectedItem(poi)}
         />
         <SearchBar
           selectedItem={selectedItem}
