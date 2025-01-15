@@ -1,4 +1,4 @@
-import React, { useEffect, useState, MouseEventHandler, useContext } from "react";
+import React, { useEffect, useState, MouseEventHandler, useRef } from "react";
 import * as d3 from "d3";
 import { Position, RoadNetwork } from "@/types";
 import { useResizeObserver } from "@/hooks/useResizeObserver";
@@ -34,6 +34,8 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     unknown
   > | null>(null);
   const [containerRef, size] = useResizeObserver();
+  const markersRefs = useRef<Map<HTMLDivElement, Position>>(new Map());
+  const markersProjections = useRef<Map<HTMLDivElement, Position>>(new Map());
 
   useEffect(() => {
     if (!svgRef || !size.width || !size.height || !data) return;
@@ -96,9 +98,30 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
       });
 
     setZoom(() => zoomBehavior);
-
     svg.call(zoomBehavior);
+  
   }, [data, size, strokeColor, strokeWidth, strokeOpacity, svgRef]);
+
+  useEffect(() => {
+    if (!projection || !transform || !markersRefs.current.size) return;
+
+    let rafId = 0;
+
+    function updateHtmlMarkers() {
+      markersRefs.current.forEach((position, node) => {
+        if (!node) return;
+        const [x, y] = projection?.(position) ?? [0, 0];
+        const [screenX, screenY] = transform!.apply([x, y]);
+        node.style.transform = `translate3d(${screenX}px, ${screenY}px, 0)`;
+      });
+    }
+
+    rafId = requestAnimationFrame(updateHtmlMarkers);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, [projection, transform]);
 
   const getBoundingBox = () => {
     let boundingBox = [
@@ -115,9 +138,13 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     return boundingBox;
   };
 
-  const getZoom = () => {
-    return transform?.k ?? 0;
-  };
+  const getZoom = () => transform?.k ?? 0;
+
+  const setRef = (node: HTMLDivElement, position: Position) => {
+    markersRefs.current.set(node, position);
+    markersProjections.current.set(node, projection?.(position) ?? [0, 0]);
+  }
+
 
   const onSvgClick: MouseEventHandler<SVGSVGElement> = (evt) => {
     if (!projection || !transform) return;
@@ -142,6 +169,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
     <MapContextProvider
       projection={projection}
       transform={transform}
+      setRef={setRef}
       getBoundingBox={getBoundingBox}
       getZoom={getZoom}
     >
@@ -175,7 +203,9 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
                 {children}
               </g>
             </svg>
-            {htmlMarkers}
+            <div style={{ position: "absolute", top: 0, left: 0 }}>
+              {htmlMarkers}
+            </div>
           </div>
         </OverlayProvider>
       </MapControlsProvider>

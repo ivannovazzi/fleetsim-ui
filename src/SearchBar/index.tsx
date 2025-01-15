@@ -27,7 +27,6 @@ export default function SearchBar({
   selectedItem,
   onDestinationClick,
   onItemSelect,
-  onItemUnselect,
 }: SearchBarProps) {
   const { roads } = useRoads();
   const { pois } = usePois();

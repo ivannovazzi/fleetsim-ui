@@ -7,6 +7,7 @@ export interface PanToOptions {
 export interface MapContextValue {
   projection: d3.GeoProjection | null;
   transform: d3.ZoomTransform | null;
+  setRef: (ref: HTMLDivElement, position: Position) => void;
   getBoundingBox: () => [Position, Position];
   getZoom: () => number;
 }
