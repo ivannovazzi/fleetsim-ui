@@ -22,7 +22,7 @@ export default function POIs({ visible, onClick }: POIMarkerProps) {
 
   const [[west, north], [east, south]] = getBoundingBox();
 
-  const inBoundsPois = pois.filter(
+  const inBoundsPois = pois.filter(poi => !!poi.name).filter(
     ({ coordinates: [lat, lng] }) =>
       lat >= south && lat <= north && lng >= west && lng <= east
   );
