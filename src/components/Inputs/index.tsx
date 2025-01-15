@@ -96,11 +96,14 @@ export function Typeahead<T>({
   );
   const [inputValue, setInputValue] = React.useState(value ? getLabel(value) : "");
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const hasValue = !!value;
   
   useEffect(() => {
-    if (!value)
+    if (!hasValue && !isOpen) {
       setInputValue("");
-  }, [value]);
+    }
+  }, [hasValue, isOpen]);
 
   const filtered = React.useMemo(
     () =>

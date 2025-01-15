@@ -25,8 +25,16 @@ export default function HTMLMarker({
 
   }, [position, offset, projection, transform]);
 
+  const style:React.CSSProperties = {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    height: 0,
+    width: 0,
+  }
+
   return (
-    <div ref={markerRef} style={{ position: 'absolute', left: 0, top: 0 }} {...props}>
+    <div ref={markerRef} style={style} {...props}>
       {children}
     </div>
   );

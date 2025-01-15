@@ -41,8 +41,8 @@ export default function SearchBar({
         options={items}
         value={selectedItem}
         onChange={onItemSelect}
-        onOptionHover={onItemSelect}
-        onOptionLeave={onItemUnselect}
+        // onOptionHover={onItemSelect}
+        // onOptionLeave={onItemUnselect}
         renderLabel={(item) => item!.name || "not sure"}
         renderOption={(item) => <Option item={item} />}
         placeholder="Search..."

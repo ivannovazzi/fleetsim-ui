@@ -16,9 +16,8 @@ export default function App() {
   const [onContextClick, ref, xy, closeContextMenu] = useContextMenu();
   const [selectedItem, setSelectedItem] = useState<Road | POI | null>(null);
   const [destination, setDestination] = useState<Position | null>(null);
-  const [status, setStatus] = useState<
-    Pick<SimulationStatus, "interval" | "running">
-  >({
+  const [status, setStatus] = useState<SimulationStatus>({
+    adapterTimeout: 0,
     interval: 0,
     running: false,
   });
@@ -127,11 +126,12 @@ export default function App() {
     client.onConnect(() => setConnected(true));
     client.onDisconnect(() => setConnected(false));
     client.onStatus((data) => {
-      setStatus({ interval: data.interval, running: data.running });
+      setStatus({ interval: data.interval, running: data.running, adapterTimeout: data.adapterTimeout });
     });
     client.getStatus().then((response) => {
       if (response.data) {
         setStatus({
+          adapterTimeout: response.data.adapterTimeout,
           interval: response.data.interval,
           running: response.data.running,
         });
@@ -146,8 +146,7 @@ export default function App() {
     <div className={styles.app}>
       <div className={styles.controls}>
         <ControlPanel
-          running={status.running}
-          interval={status.interval}
+          status={status}
           vehicles={vehicles}
           connected={connected}
           modifiers={modifiers}

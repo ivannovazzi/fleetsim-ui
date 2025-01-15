@@ -51,6 +51,7 @@ interface VehicleUIFlags {
 export type Vehicle = VehicleDTO & VehicleUIFlags;
 
 export interface SimulationStatus {
+  adapterTimeout: number;
   interval: number;
   running: boolean;
 }
