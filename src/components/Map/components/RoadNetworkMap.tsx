@@ -145,6 +145,7 @@ export const RoadNetworkMap: React.FC<RoadNetworkMapProps> = ({
 
   return (
     <MapContextProvider
+      map={svgRef}
       projection={projection}
       transform={transform}
       getBoundingBox={getBoundingBox}

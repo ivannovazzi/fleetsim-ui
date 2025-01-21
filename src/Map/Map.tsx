@@ -11,6 +11,7 @@ import Heatmap from "./Heatmap";
 import POIs from "./POIs";
 import { isPOI, isRoad } from "@/utils/general";
 import POIMarker from "./POI/POI";
+import Selection from "@/components/Map/components/Selection";
 
 interface MapProps {
   filters: Filters;
@@ -54,6 +55,7 @@ export default function Map({
         </>
       }
     >
+      {/* <Selection /> */}
       <Direction selected={filters.selected} hovered={filters.hovered} />
       <TrafficZones visible={modifiers.showHeatzones} />
 
