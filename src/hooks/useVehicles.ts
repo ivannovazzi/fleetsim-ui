@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import client from "./utils/client";
-import { Modifiers, Position, Vehicle, VehicleDTO } from "./types";
+import client from "../utils/client";
+import { Modifiers, Position, Vehicle, VehicleDTO } from "../types";
 
 export interface Filters {
   filter: string;

@@ -7,6 +7,7 @@ interface MarkerProps {
   children?: React.ReactNode;
   offset?: Position;
   animation?: number;
+  className?: string;
   onClick?: (e: React.MouseEvent<SVGGElement>) => void;
   onMouseEnter?: (e: React.MouseEvent<SVGGElement>) => void;
   onMouseLeave?: (e: React.MouseEvent<SVGGElement>) => void;
@@ -17,6 +18,7 @@ export const Marker: React.FC<MarkerProps> = ({
   children,
   offset,
   animation = 500,
+  className,
   onClick,
   onMouseEnter,
   onMouseLeave,
@@ -24,7 +26,6 @@ export const Marker: React.FC<MarkerProps> = ({
   const { projection } = useMapContext();
   const markerRef = useRef<SVGGElement>(null);
 
-  // Existing position update effect
   useEffect(() => {
     if (!projection || !markerRef.current) return;
     const [x, y] = projection(position) ?? [0, 0];
@@ -48,6 +49,7 @@ export const Marker: React.FC<MarkerProps> = ({
         transform: "translate(0, 0)",
         cursor: onClick ? "pointer" : "default",
       }}
+      className={className}
     >
       <g transform={`translate(${offset?.[0] ?? 0}, ${offset?.[1] ?? 0})`}>
         {children}

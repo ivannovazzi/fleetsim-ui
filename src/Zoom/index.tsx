@@ -1,4 +1,4 @@
-import styles from "./Zoom.module.css";
+import styles from "./Zoom.module.scss";
 import { ZoomIn, ZoomOut } from "@/components/Icons";
 import { SquaredButton } from "@/components/Inputs";
 import { useMapControls } from "@/components/Map/hooks";

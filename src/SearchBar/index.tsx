@@ -1,15 +1,27 @@
-
 import { POI, Road } from "@/types";
-import { Directions } from "@/components/Icons";
+import { Directions, POI as POIIcon, Road as RoadIcon } from "@/components/Icons";
 import { useRoads } from "@/hooks/useRoads";
 import { usePois } from "@/hooks/usePois";
 import { SquaredButton, Typeahead } from "@/components/Inputs";
 import styles from "./SearchBar.module.css";
+import { isRoad } from "@/utils/general";
+import { useCallback } from "react";
 
-interface SearchBarProps {  
+function Option({ item }: { item: Road | POI }) {
+  const icon = isRoad(item) ? <RoadIcon /> : <POIIcon />;
+  return (
+    <div className={styles.option}>
+      {icon}
+      <span>{item.name}</span>
+    </div>
+  );
+}
+
+interface SearchBarProps {
   selectedItem: Road | POI | null;
   onDestinationClick: () => void;
   onItemSelect: (item: Road | POI) => void;
+  onItemUnselect: () => void;
 }
 
 export default function SearchBar({
@@ -19,27 +31,29 @@ export default function SearchBar({
 }: SearchBarProps) {
   const { roads } = useRoads();
   const { pois } = usePois();
+  const renderLabel = useCallback((item: Road | POI) => item.name || "not sure", []);
+  const renderOption = (item: Road | POI) => <Option item={item} />;
 
   return (
     <div className={styles.searchBar}>
       <Typeahead
         className={styles.typeahead}
-        options={[...roads, ...pois].flat()}
+        options={[...roads, ...pois]}
         value={selectedItem}
-        onChange={(item) => onItemSelect(item!)}
-        onOptionHover={(item) => onItemSelect(item!)}
-        renderLabel={(item) => item!.name || "not sure"}
-        renderOption={(item) => item!.name}
+        onChange={onItemSelect}
+        // onOptionHover={onItemSelect}
+        // onOptionLeave={onItemUnselect}
+        renderLabel={renderLabel}
+        renderOption={renderOption}
         placeholder="Search..."
       />
-      
+
       <SquaredButton
         onClick={onDestinationClick}
         icon={<Directions />}
         disabled={!selectedItem}
         className={styles.destinationButton}
       />
-
     </div>
   );
 }

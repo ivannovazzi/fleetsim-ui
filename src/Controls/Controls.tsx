@@ -1,10 +1,10 @@
 import React from "react";
 import client from "@/utils/client";
-import { Modifiers, StartOptions, Vehicle } from "@/types";
+import { Modifiers, SimulationStatus, StartOptions, Vehicle } from "@/types";
 import styles from "./Controls.module.css";
 import Vehicles from "./Vehicles";
-import { HeatZone, Pause, Play, Reset } from "@/components/Icons";
-import { Filters } from "@/useVehicles";
+import { Hourglass, Pause, Play, Reset } from "@/components/Icons";
+import { Filters } from "@/hooks/useVehicles";
 import { useOptions } from "@/hooks/useOptions";
 import { Input, Switch, Range, SquaredButton } from "@/components/Inputs";
 import { eValue } from "@/utils/form";
@@ -57,7 +57,7 @@ function MainControls({
       />
       <SquaredButton
         onClick={onZones}
-        icon={<HeatZone />}
+        icon={<Hourglass />}
         className={styles.mainButton}
       />
       <SquaredButton
@@ -70,9 +70,8 @@ function MainControls({
 }
 
 interface ControlPanelProps {
-  running: boolean;
   vehicles: Vehicle[];
-  interval: number;
+  status: SimulationStatus;
   connected: boolean;
   modifiers: Modifiers;
   onChangeModifiers: <T extends keyof Modifiers>(
@@ -83,12 +82,12 @@ interface ControlPanelProps {
   onHoverVehicle: (id: string) => void;
   onUnhoverVehicle: () => void;
   onFilterChange: (value: string) => void;
+  onAdapterChange: (value: boolean) => void;
 }
 
 export default function ControlPanel({
-  running,
   vehicles,
-  interval,
+  status,
   connected,
   modifiers,
   filters,
@@ -97,10 +96,11 @@ export default function ControlPanel({
   onSelectVehicle,
   onHoverVehicle,
   onUnhoverVehicle,
+  onAdapterChange,
 }: ControlPanelProps) {
   const { options, updateOption } = useOptions(300);
 
-  useTracking(vehicles, filters.selected, interval);
+  useTracking(vehicles, filters.selected, status.interval);
 
   const handleChange =
     (field: keyof StartOptions) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,9 +119,9 @@ export default function ControlPanel({
       <Block className={styles.status}>
         <div>
           <Item label="Connected">{connected ? "Yes" : "No"}</Item>
-          <Item label="Running">{running ? "Yes" : "No"}</Item>
+          <Item label="Running">{status.running ? "Yes" : "No"}</Item>
           <Item label="Vehicles">{vehicles.length}</Item>
-          <Item label="Adapter">{interval / 1000} sec</Item>
+          <Item label="Adapter">{status.adapterTimeout / 1000} sec</Item>
         </div>
         <div className={styles.danger}>
           <Item label="Use Adapter">
@@ -129,7 +129,7 @@ export default function ControlPanel({
               disabled={!options.editAdapter}
               type="checkbox"
               checked={options.useAdapter}
-              onChange={handleChange("useAdapter")}
+              onChange={(e) => onAdapterChange(e.target.checked)}
             />
           </Item>
           <Item label="Update Server">
@@ -259,8 +259,8 @@ export default function ControlPanel({
       </Block>
       <Block className={styles.mainControls}>
         <MainControls
-          running={running}
-          onPlayPause={running ? client.stop : handleStart}
+          running={status.running}
+          onPlayPause={status.running ? client.stop : handleStart}
           onReset={client.reset}
           onZones={client.makeHeatzones}
         />

@@ -1,5 +1,5 @@
 import { Modifiers, POI, Position, Road, Vehicle } from "@/types";
-import { Filters } from "@/useVehicles";
+import { Filters } from "@/hooks/useVehicles";
 
 import { useNetwork } from "@/hooks/useNetwork";
 import { RoadNetworkMap } from "@/components/Map/components/RoadNetworkMap";
@@ -10,7 +10,7 @@ import RoadRenderer from "./Road";
 import Heatmap from "./Heatmap";
 import POIs from "./POIs";
 import { isPOI, isRoad } from "@/utils/general";
-import POIMarker from "./POI";
+import POIMarker from "./POI/POI";
 
 interface MapProps {
   filters: Filters;
@@ -21,15 +21,19 @@ interface MapProps {
   onClick: (id: string) => void;
   onMapClick?: (event: React.MouseEvent, position: Position) => void;
   onMapContextClick: (evt: React.MouseEvent, position: Position) => void;
+  onPOIClick: (poi: POI) => void;
 }
 
 export default function Map({
+  vehicles,
+  animFreq,
   modifiers,
   filters,
   selectedItem,
+  onClick,
   onMapClick,
   onMapContextClick,
-  ...props
+  onPOIClick,
 }: MapProps) {
   const network = useNetwork();
 
@@ -41,24 +45,33 @@ export default function Map({
       strokeWidth={1.5}
       onClick={onMapClick}
       onContextClick={onMapContextClick}
+      htmlMarkers={
+        <>
+          <POIs visible={modifiers.showPOIs} onClick={onPOIClick} />
+          {selectedItem && isPOI(selectedItem) && (
+            <POIMarker poi={selectedItem} showLabel />
+          )}
+        </>
+      }
     >
+      {/* <Selection /> */}
       <Direction selected={filters.selected} hovered={filters.hovered} />
       <TrafficZones visible={modifiers.showHeatzones} />
-      <POIs visible={modifiers.showPOIs}/>
+
       {modifiers.showVehicles &&
-        props.vehicles?.map((vehicle) => (
+        vehicles?.map((vehicle) => (
           <VehicleM
             key={vehicle.id}
-            animFreq={props.animFreq}
+            animFreq={animFreq}
             scale={1}
             {...vehicle}
-            onClick={() => props.onClick(vehicle.id)}
+            onClick={() => onClick(vehicle.id)}
           />
         ))}
-      {modifiers.showHeatmap && <Heatmap vehicles={props.vehicles} />}
-      {selectedItem && isRoad(selectedItem) && <RoadRenderer road={selectedItem} />}
-      {selectedItem && isPOI(selectedItem) && <POIMarker poi={selectedItem} />}
-
+      {modifiers.showHeatmap && <Heatmap vehicles={vehicles} />}
+      {selectedItem && isRoad(selectedItem) && (
+        <RoadRenderer road={selectedItem} />
+      )}
     </RoadNetworkMap>
   );
 }

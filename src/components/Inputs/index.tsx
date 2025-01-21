@@ -13,8 +13,14 @@ interface SquaredButtonProps
 
 export function SquaredButton({ icon, ...props }: SquaredButtonProps) {
   return (
-    <button type="button" {...props} className={classNames([styles.squaredButton, props.className])}>
-      {React.cloneElement(icon as React.ReactElement, { className: styles.squaredButtonIcon })}
+    <button
+      type="button"
+      {...props}
+      className={classNames([styles.squaredButton, props.className])}
+    >
+      {React.cloneElement(icon as React.ReactElement, {
+        className: styles.squaredButtonIcon,
+      })}
     </button>
   );
 }
@@ -65,12 +71,13 @@ interface TypeaheadProps<T>
     "onChange" | "value"
   > {
   label?: string;
-  value?: T;
+  value?: T | null;
   options: T[];
   renderOption?: (option: T) => React.ReactNode;
   renderLabel?: (option: T) => string;
   onChange: (option: T) => void;
-  onOptionHover?: (option: T | null) => void;
+  onOptionHover?: (option: T) => void;
+  onOptionLeave?: () => void;
 }
 
 export function Typeahead<T>({
@@ -81,24 +88,31 @@ export function Typeahead<T>({
   value,
   onChange,
   onOptionHover = () => {},
+  onOptionLeave = () => {},
   ...props
 }: TypeaheadProps<T>) {
   const getLabel = React.useCallback(
-    (option: T) =>
-      renderLabel
-        ? renderLabel(option)
-        : renderOption
-        ? (renderOption(option) as string)
-        : String(option),
-    [renderLabel, renderOption]
+    (option: T) => (renderLabel ? renderLabel(option) : String(option)),
+    [renderLabel]
   );
-  const [inputValue, setInputValue] = React.useState(value ? getLabel(value) : "");
+  const [inputValue, setInputValue] = React.useState(
+    value ? getLabel(value) : ""
+  );
   const [isOpen, setIsOpen] = React.useState(false);
-  
+
+  const hasValue = !!value;
+
   useEffect(() => {
-    if (!value)
+    if (!hasValue && !isOpen) {
       setInputValue("");
-  }, [value]);
+    }
+  }, [hasValue, isOpen]);
+
+  useEffect(() => {
+    if (value) {
+      setInputValue(getLabel(value));
+    }
+  }, [value, getLabel]);
 
   const filtered = React.useMemo(
     () =>
@@ -135,7 +149,7 @@ export function Typeahead<T>({
                 handleSelect(option);
               }}
               onMouseEnter={() => onOptionHover(option)}
-              onMouseLeave={() => onOptionHover(null)}
+              onMouseLeave={() => onOptionLeave()}
               className={styles.option}
             >
               {renderOption ? renderOption(option) : String(option)}

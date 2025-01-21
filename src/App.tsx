@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import client from "@/utils/client";
 import ControlPanel from "./Controls/Controls";
 import Map from "./Map/Map";
@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import Zoom from "./Zoom/";
 import { Modifiers, POI, Position, Road, SimulationStatus } from "./types";
 import styles from "./App.module.css";
-import { useVehicles } from "./useVehicles";
+import { useVehicles } from "./hooks/useVehicles";
 import useContextMenu from "./hooks/useContextMenu";
 import ContextMenu from "./components/ContextMenu";
 import { Button } from "./components/Inputs";
@@ -16,9 +16,8 @@ export default function App() {
   const [onContextClick, ref, xy, closeContextMenu] = useContextMenu();
   const [selectedItem, setSelectedItem] = useState<Road | POI | null>(null);
   const [destination, setDestination] = useState<Position | null>(null);
-  const [status, setStatus] = useState<
-    Pick<SimulationStatus, "interval" | "running">
-  >({
+  const [status, setStatus] = useState<SimulationStatus>({
+    adapterTimeout: 0,
     interval: 0,
     running: false,
   });
@@ -108,35 +107,46 @@ export default function App() {
   };
 
   useEffect(() => {
+    client.getVehicles().then((response) => {
+      setVehicles(response.data);
+    });
+  }, [setVehicles]);
+
+  const setUseAdapter = useCallback(
+    async (use: boolean) => {
+      await client.setUseAdapter(use);
+      client.getVehicles().then((response) => {
+        setVehicles(response.data);
+      });
+    },
+    [setVehicles]
+  );
+
+  useEffect(() => {
     client.onConnect(() => setConnected(true));
     client.onDisconnect(() => setConnected(false));
-
     client.onStatus((data) => {
-      setStatus({ interval: data.interval, running: data.running });
-      setVehicles(data.vehicles);
+      setStatus({ interval: data.interval, running: data.running, adapterTimeout: data.adapterTimeout });
     });
-
     client.getStatus().then((response) => {
       if (response.data) {
         setStatus({
+          adapterTimeout: response.data.adapterTimeout,
           interval: response.data.interval,
           running: response.data.running,
         });
-        setVehicles(response.data.vehicles);
       }
     });
 
     client.connectWebSocket();
-
     return () => client.disconnect();
-  }, [setVehicles]);
+  }, []);
 
   return (
     <div className={styles.app}>
       <div className={styles.controls}>
         <ControlPanel
-          running={status.running}
-          interval={status.interval}
+          status={status}
           vehicles={vehicles}
           connected={connected}
           modifiers={modifiers}
@@ -146,6 +156,7 @@ export default function App() {
           onSelectVehicle={onSelectVehicle}
           onHoverVehicle={onHoverVehicle}
           onUnhoverVehicle={onUnhoverVehicle}
+          onAdapterChange={setUseAdapter}
         />
       </div>
 
@@ -155,15 +166,17 @@ export default function App() {
           vehicles={vehicles}
           filters={filters}
           modifiers={modifiers}
+          selectedItem={selectedItem}
           onClick={onSelectVehicle}
           onMapClick={onMapClick}
           onMapContextClick={onMapContextClick}
-          selectedItem={selectedItem}
+          onPOIClick={(poi) => setSelectedItem(poi)}
         />
         <SearchBar
           selectedItem={selectedItem}
           onDestinationClick={onDestinationClick}
           onItemSelect={(item) => setSelectedItem(item)}
+          onItemUnselect={() => setSelectedItem(null)}
         />
         <Zoom />
       </div>
@@ -173,7 +186,7 @@ export default function App() {
             ref={ref}
             style={{
               padding: "0.5rem",
-              backdropFilter: "blur(5px)",
+              backdropFilter: "var(--blur-px)",
               backgroundColor: "rgba(255, 255, 255, 0.05)",
               borderRadius: "0.5rem",
               gap: 3,
