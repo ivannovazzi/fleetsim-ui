@@ -13,8 +13,14 @@ interface SquaredButtonProps
 
 export function SquaredButton({ icon, ...props }: SquaredButtonProps) {
   return (
-    <button type="button" {...props} className={classNames([styles.squaredButton, props.className])}>
-      {React.cloneElement(icon as React.ReactElement, { className: styles.squaredButtonIcon })}
+    <button
+      type="button"
+      {...props}
+      className={classNames([styles.squaredButton, props.className])}
+    >
+      {React.cloneElement(icon as React.ReactElement, {
+        className: styles.squaredButtonIcon,
+      })}
     </button>
   );
 }
@@ -86,19 +92,16 @@ export function Typeahead<T>({
   ...props
 }: TypeaheadProps<T>) {
   const getLabel = React.useCallback(
-    (option: T) =>
-      renderLabel
-        ? renderLabel(option)
-        : renderOption
-        ? (renderOption(option) as string)
-        : String(option),
-    [renderLabel, renderOption]
+    (option: T) => (renderLabel ? renderLabel(option) : String(option)),
+    [renderLabel]
   );
-  const [inputValue, setInputValue] = React.useState(value ? getLabel(value) : "");
+  const [inputValue, setInputValue] = React.useState(
+    value ? getLabel(value) : ""
+  );
   const [isOpen, setIsOpen] = React.useState(false);
 
   const hasValue = !!value;
-  
+
   useEffect(() => {
     if (!hasValue && !isOpen) {
       setInputValue("");

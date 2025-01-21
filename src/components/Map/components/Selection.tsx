@@ -54,7 +54,7 @@ export default function Selection() {
         left: 0,
         top: 0,
         x: Math.min(start.x, end.x),
-        y: ,
+        y: Math.min(start.y, end.y),
         width: Math.abs(start.x - end.x),
         height: Math.abs(start.y - end.y),
       }}

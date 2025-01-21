@@ -5,6 +5,7 @@ import { usePois } from "@/hooks/usePois";
 import { SquaredButton, Typeahead } from "@/components/Inputs";
 import styles from "./SearchBar.module.css";
 import { isRoad } from "@/utils/general";
+import { useCallback } from "react";
 
 function Option({ item }: { item: Road | POI }) {
   const icon = isRoad(item) ? <RoadIcon /> : <POIIcon />;
@@ -30,20 +31,20 @@ export default function SearchBar({
 }: SearchBarProps) {
   const { roads } = useRoads();
   const { pois } = usePois();
-
-  const items = [...roads, ...pois];
+  const renderLabel = useCallback((item: Road | POI) => item.name || "not sure", []);
+  const renderOption = (item: Road | POI) => <Option item={item} />;
 
   return (
     <div className={styles.searchBar}>
       <Typeahead
         className={styles.typeahead}
-        options={items}
+        options={[...roads, ...pois]}
         value={selectedItem}
         onChange={onItemSelect}
         // onOptionHover={onItemSelect}
         // onOptionLeave={onItemUnselect}
-        renderLabel={(item) => item!.name || "not sure"}
-        renderOption={(item) => <Option item={item} />}
+        renderLabel={renderLabel}
+        renderOption={renderOption}
         placeholder="Search..."
       />
 
