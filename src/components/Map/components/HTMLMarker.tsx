@@ -12,7 +12,7 @@ export default function HTMLMarker({
   position,
   offset = [0, 0],
   children,
-  ...props 
+  ...props
 }: HtmlMarkerProps) {
   const { projection, transform } = useMapContext();
   const markerRef = useRef<HTMLDivElement>(null);
@@ -20,18 +20,19 @@ export default function HTMLMarker({
   useEffect(() => {
     if (!markerRef.current || !projection || !transform) return;
     const [x, y] = projection(position) ?? [0, 0];
-    const [screenX, screenY] = transform.apply([x, y]);
-    markerRef.current.style.transform = `translate3d(${screenX + offset[0]}px, ${screenY + offset[1]}px, 0)`;
-
+    // The marker is scaled by the inverse of the zoom level
+    markerRef.current.style.transform = `translate3d(${x + offset[0]}px, ${
+      y + offset[1]
+    }px, 0) scale(${1 / transform.k})`;
   }, [position, offset, projection, transform]);
 
-  const style:React.CSSProperties = {
-    position: 'absolute',
+  const style: React.CSSProperties = {
+    position: "absolute",
     left: 0,
     top: 0,
     height: 0,
     width: 0,
-  }
+  };
 
   return (
     <div ref={markerRef} style={style} {...props}>

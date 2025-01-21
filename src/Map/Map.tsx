@@ -45,12 +45,14 @@ export default function Map({
       strokeWidth={1.5}
       onClick={onMapClick}
       onContextClick={onMapContextClick}
-      htmlMarkers={<>
-        <POIs visible={modifiers.showPOIs} onClick={onPOIClick}/>
-        {selectedItem && isPOI(selectedItem) && (
-          <POIMarker poi={selectedItem} showLabel />
-        )}
-      </>}
+      htmlMarkers={
+        <>
+          <POIs visible={modifiers.showPOIs} onClick={onPOIClick} />
+          {selectedItem && isPOI(selectedItem) && (
+            <POIMarker poi={selectedItem} showLabel />
+          )}
+        </>
+      }
     >
       <Direction selected={filters.selected} hovered={filters.hovered} />
       <TrafficZones visible={modifiers.showHeatzones} />
@@ -68,7 +70,7 @@ export default function Map({
       {modifiers.showHeatmap && <Heatmap vehicles={vehicles} />}
       {selectedItem && isRoad(selectedItem) && (
         <RoadRenderer road={selectedItem} />
-      )}      
+      )}
     </RoadNetworkMap>
   );
 }

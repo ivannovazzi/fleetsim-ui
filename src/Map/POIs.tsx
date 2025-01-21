@@ -10,20 +10,25 @@ function distancePx(x1: number, y1: number, x2: number, y2: number) {
   return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
 }
 
-function getBySpacing(items: POI[], transform: ZoomTransform, projection: GeoProjection, minPxDistance: number) {
+function getBySpacing(
+  items: POI[],
+  transform: ZoomTransform,
+  projection: GeoProjection,
+  minPxDistance: number
+) {
   const placedPois: Array<{
-    poi: typeof items[number];
+    poi: (typeof items)[number];
     px: number;
     py: number;
   }> = [];
 
   for (const poi of items) {
-    const [lat, lng] = poi.coordinates;    
+    const [lat, lng] = poi.coordinates;
     const projected = projection([lng, lat]);
-    
-    if (!projected) continue;    
+
+    if (!projected) continue;
     const [px, py] = transform.apply(projected);
-    
+
     const tooClose = placedPois.some(({ px: x2, py: y2 }) => {
       return distancePx(px, py, x2, y2) < minPxDistance;
     });
@@ -47,25 +52,26 @@ export default function POIs({ visible, onClick }: POIMarkerProps) {
 
   const [[west, north], [east, south]] = getBoundingBox();
 
-  
-  const inBoundsPois = pois.filter(poi => !!poi.name).filter(
-    ({ coordinates: [lat, lng] }) =>
-      lat >= south && lat <= north && lng >= west && lng <= east
-  );
+  const inBoundsPois = pois
+    .filter((poi) => !!poi.name)
+    .filter(
+      ({ coordinates: [lat, lng] }) =>
+        lat >= south && lat <= north && lng >= west && lng <= east
+    );
   const busStops = inBoundsPois.filter(isBusStop);
   const notBusStops = inBoundsPois.filter(isNotBusStop);
-  
-  const placedPois = getBySpacing(notBusStops, transform, projection, 120);
-  const placedBusStops = getBySpacing(busStops, transform, projection, 40);
+
+  const placedPois = getBySpacing(notBusStops, transform, projection, 80);
+  const placedBusStops = getBySpacing(busStops, transform, projection, 15);
 
   return (
-    <>      
+    <>
       {placedBusStops.map(({ poi }) => (
         <POIMarker key={poi.id} poi={poi} onClick={() => onClick(poi)} />
       ))}
 
       {placedPois.map(({ poi }) => (
-        <POIMarker key={poi.id} poi={poi} onClick={() => onClick(poi)}/>
+        <POIMarker key={poi.id} poi={poi} onClick={() => onClick(poi)} />
       ))}
     </>
   );

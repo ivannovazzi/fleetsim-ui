@@ -186,7 +186,7 @@ export default function App() {
             ref={ref}
             style={{
               padding: "0.5rem",
-              backdropFilter: "blur(5px)",
+              backdropFilter: "var(--blur-px)",
               backgroundColor: "rgba(255, 255, 255, 0.05)",
               borderRadius: "0.5rem",
               gap: 3,

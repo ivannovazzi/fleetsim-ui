@@ -30,7 +30,9 @@ interface DirectionProps {
 
 export default function DirectionMap({ selected, hovered }: DirectionProps) {
   const directions = useDirections();
-  const [selectedDirection, setSelectedDirection] = useState<Route | null>(null);
+  const [selectedDirection, setSelectedDirection] = useState<Route | null>(
+    null
+  );
   const [hoveredDirection, setHoveredDirection] = useState<Route | null>(null);
   useEffect(() => {
     if (directions.size > 0) {

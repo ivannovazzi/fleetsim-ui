@@ -4,7 +4,6 @@ import { OverlayContextValue, MapContextValue, MapControlsContextValue } from ".
 export const MapContext = createContext<MapContextValue>({
   projection: null,
   transform: null,
-  setRef: () => {},
   getBoundingBox: () => [[0,0], [0,0]],
   getZoom: () => 0,
 });

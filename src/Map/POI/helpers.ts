@@ -22,7 +22,7 @@ export function getFillByType(type: string): string {
     return "#cc6633";
   }
   if (type === "bus_stop") {
-    return "#999";
+    return "#bbf";
   }
   return "#666";
 }
