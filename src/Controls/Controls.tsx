@@ -3,7 +3,7 @@ import client from "@/utils/client";
 import { Modifiers, SimulationStatus, StartOptions, Vehicle } from "@/types";
 import styles from "./Controls.module.css";
 import Vehicles from "./Vehicles";
-import { HeatZone, Hourglass, Pause, Play, Reset } from "@/components/Icons";
+import { Hourglass, Pause, Play, Reset } from "@/components/Icons";
 import { Filters } from "@/hooks/useVehicles";
 import { useOptions } from "@/hooks/useOptions";
 import { Input, Switch, Range, SquaredButton } from "@/components/Inputs";
